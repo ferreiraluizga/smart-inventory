@@ -21,4 +21,14 @@ public class ProdutoService {
         return produtoMapper.toResponse(produtoRepository.save(p));
     }
 
+    public ProdutoResponse atualizar(ProdutoRequest dto, Long id) {
+        Produto p = produtoMapper.toEntity(dto);
+        p.setId(id);
+        return produtoMapper.toResponse(produtoRepository.save(p));
+    }
+
+    public void excluir(Long id) {
+        produtoRepository.deleteById(id);
+    }
+
 }
