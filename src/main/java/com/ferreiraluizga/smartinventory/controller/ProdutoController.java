@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/produtos")
@@ -31,6 +33,36 @@ public class ProdutoController {
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         produtoService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<ProdutoResponse>> listarTodos() {
+        List<ProdutoResponse> produtos = produtoService.listarTodos();
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<ProdutoResponse> buscarPorId(@PathVariable Long id) {
+        ProdutoResponse produto = produtoService.buscarPorId(id);
+        return ResponseEntity.ok(produto);
+    }
+
+    @GetMapping("/buscar-nome")
+    public ResponseEntity<List<ProdutoResponse>> buscarPorNome(@RequestParam String nome) {
+        List<ProdutoResponse> produtos = produtoService.buscarPorNome(nome);
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<List<ProdutoResponse>> listarAtivos() {
+        List<ProdutoResponse> produtos = produtoService.listarAtivos();
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/estoque-baixo")
+    public ResponseEntity<List<ProdutoResponse>> buscarEstoqueBaixo() {
+        List<ProdutoResponse> produtos = produtoService.buscarEstoqueBaixo();
+        return ResponseEntity.ok(produtos);
     }
 
 }
