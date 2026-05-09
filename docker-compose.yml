@@ -5,7 +5,7 @@ services:
     restart: always
 
     environment:
-      POSTGRES_DB: smartinteventory
+      POSTGRES_DB: smartinventory
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
 
