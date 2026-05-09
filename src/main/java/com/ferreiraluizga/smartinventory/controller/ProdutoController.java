@@ -35,34 +35,37 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<ProdutoResponse>> listarTodos() {
-        List<ProdutoResponse> produtos = produtoService.listarTodos();
-        return ResponseEntity.ok(produtos);
+        List<ProdutoResponse> response = produtoService.listarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponse> buscarPorId(@PathVariable Long id) {
-        ProdutoResponse produto = produtoService.buscarPorId(id);
-        return ResponseEntity.ok(produto);
+        ProdutoResponse response = produtoService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/buscar-nome")
+    @GetMapping("/buscar")
     public ResponseEntity<List<ProdutoResponse>> buscarPorNome(@RequestParam String nome) {
-        List<ProdutoResponse> produtos = produtoService.buscarPorNome(nome);
-        return ResponseEntity.ok(produtos);
+        if (nome == null || nome.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<ProdutoResponse> response = produtoService.buscarPorNome(nome.trim());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/ativos")
     public ResponseEntity<List<ProdutoResponse>> listarAtivos() {
-        List<ProdutoResponse> produtos = produtoService.listarAtivos();
-        return ResponseEntity.ok(produtos);
+        List<ProdutoResponse> response = produtoService.listarAtivos();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/estoque-baixo")
     public ResponseEntity<List<ProdutoResponse>> buscarEstoqueBaixo() {
-        List<ProdutoResponse> produtos = produtoService.buscarEstoqueBaixo();
-        return ResponseEntity.ok(produtos);
+        List<ProdutoResponse> response = produtoService.buscarEstoqueBaixo();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
