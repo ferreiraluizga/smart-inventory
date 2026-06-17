@@ -20,6 +20,14 @@ public record ProdutoRequest(
         @Min(value = 0, message = "A quantidade do produto não pode ser negativa")
         Integer quantidade,
 
-        Boolean ativo
+        Boolean ativo,
 
+        @NotNull(message = "O produto precisa de um fornecedor")
+        Long fornecedorId,
+
+        @NotNull(message = "O produto precisa de uma categoria")
+        Long categoriaId,
+
+        @NotNull(message = "O produto precisa de uma marca")
+        Long marcaId
 ) {}

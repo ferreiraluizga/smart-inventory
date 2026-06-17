@@ -24,4 +24,16 @@ public class Produto {
     private Integer quantidade;
     private Boolean ativo;
 
+    @ManyToOne
+    @JoinColumn(name = "fornecedor_id")
+    private Fornecedor fornecedor;
+
+    @ManyToOne
+    @JoinColumn(name = "marca_id")
+    private Marca marca;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
 }

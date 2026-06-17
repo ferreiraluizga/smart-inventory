@@ -6,5 +6,11 @@ public record ProdutoResponse(
         String descricao,
         Double preco,
         Integer quantidade,
-        Boolean ativo
+        Boolean ativo,
+        Long fornecedorId,
+        String fornecedorNome,
+        Long categoriaId,
+        String categoriaNome,
+        Long marcaId,
+        String marcaNome
 ) {}
