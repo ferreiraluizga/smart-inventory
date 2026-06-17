@@ -3,6 +3,7 @@ package com.ferreiraluizga.smartinventory.controller;
 import com.ferreiraluizga.smartinventory.dto.request.ProdutoRequest;
 import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.service.ProdutoService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,19 @@ public class ProdutoController {
 
     private final ProdutoService produtoService;
 
-    @PostMapping("/salvar")
-    public ResponseEntity<ProdutoResponse> salvar(@RequestBody ProdutoRequest dto) {
+    @PostMapping
+    public ResponseEntity<ProdutoResponse> salvar(@Valid @RequestBody ProdutoRequest dto) {
          ProdutoResponse response = produtoService.salvar(dto);
          return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<ProdutoResponse> atualizar(@RequestBody ProdutoRequest dto, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ProdutoResponse> atualizar(@Valid @RequestBody ProdutoRequest dto, @PathVariable Long id) {
         ProdutoResponse response = produtoService.atualizar(dto, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping("/excluir/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         produtoService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
