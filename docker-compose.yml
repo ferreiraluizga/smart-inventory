@@ -3,17 +3,42 @@ services:
     image: postgres:14
     container_name: postgres-db
     restart: always
-
     environment:
       POSTGRES_DB: smartinventory
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
-
     ports:
       - "5432:5432"
-
+    networks:
+      - smart_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d smartinventory"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: spring-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      # Passando os valores exatos exigidos pelo seu novo application.yml
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/smartinventory
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin123
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - smart_network
+
+networks:
+  smart_network:
+    driver: bridge
 
 volumes:
   postgres_data:
