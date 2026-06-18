@@ -20,6 +20,10 @@ public class MarcaService {
     private final MarcaMapper marcaMapper;
 
     public MarcaResponse salvar(MarcaRequest dto) {
+        if (marcaRepository.existsByNome(dto.nome())) {
+            throw new RuntimeException("Já existe uma marca com esse nome");
+        }
+
         Marca m = marcaMapper.toEntity(dto);
         return marcaMapper.toResponse(marcaRepository.save(m));
     }
