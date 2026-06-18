@@ -20,7 +20,10 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String nome;
+
+    private String descricao;
 
     @OneToMany(mappedBy = "categoria")
     private List<Produto> produtos;
