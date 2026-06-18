@@ -14,4 +14,5 @@ public record FornecedorRequest(
         @NotBlank(message = "O email do fornecedor é obrigatório")
         @Email(message = "O email do fornecedor deve ser válido")
         String email
+
 ) { }

@@ -30,4 +30,5 @@ public record ProdutoRequest(
 
         @NotNull(message = "O produto precisa de uma marca")
         Long marcaId
+
 ) {}
