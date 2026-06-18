@@ -18,10 +18,19 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
     private String descricao;
+
+    @Column(nullable = false)
     private Double preco;
+
+    @Column(nullable = false)
     private Integer quantidade;
+
+    @Column(nullable = false)
     private Boolean ativo;
 
     @ManyToOne

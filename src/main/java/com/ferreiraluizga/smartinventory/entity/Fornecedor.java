@@ -20,12 +20,13 @@ public class Fornecedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String cnpj;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "fornecedor")
