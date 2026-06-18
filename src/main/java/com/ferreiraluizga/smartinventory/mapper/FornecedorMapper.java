@@ -1,5 +1,6 @@
 package com.ferreiraluizga.smartinventory.mapper;
 
+import com.ferreiraluizga.smartinventory.dto.request.FornecedorRequest;
 import com.ferreiraluizga.smartinventory.dto.response.FornecedorResponse;
 import com.ferreiraluizga.smartinventory.entity.Fornecedor;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,8 @@ public class FornecedorMapper {
         );
     }
 
-    public Fornecedor toEntity(FornecedorResponse dto) {
+    public Fornecedor toEntity(FornecedorRequest dto) {
         Fornecedor f = new Fornecedor();
-        f.setId(dto.id());
         f.setNome(dto.nome());
         f.setCnpj(dto.cnpj());
         f.setEmail(dto.email());

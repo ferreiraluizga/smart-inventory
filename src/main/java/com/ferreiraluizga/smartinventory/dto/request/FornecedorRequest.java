@@ -1,5 +1,6 @@
 package com.ferreiraluizga.smartinventory.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record FornecedorRequest(
@@ -11,5 +12,6 @@ public record FornecedorRequest(
         String cnpj,
 
         @NotBlank(message = "O email do fornecedor é obrigatório")
+        @Email(message = "O email do fornecedor deve ser válido")
         String email
 ) { }
