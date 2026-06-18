@@ -21,7 +21,11 @@ public class Fornecedor {
     private Long id;
 
     private String nome;
+
+    @Column(unique = true)
     private String cnpj;
+
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "fornecedor")
