@@ -28,6 +28,10 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoResponse atualizar(ProdutoRequest dto, Long id) {
+        if(!produtoRepository.existsById(id)) {
+            throw new RuntimeException("Produto não encontrado");
+        }
+
         Produto p = produtoMapper.toEntity(dto);
         p.setId(id);
         return produtoMapper.toResponse(produtoRepository.save(p));
@@ -55,7 +59,7 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public List<ProdutoResponse> buscarPorNome(String nome) {
-        List<Produto> produtos = produtoRepository.findByNome(nome);
+        List<Produto> produtos = produtoRepository.findProdutoByNomeContaining(nome);
         return produtos.stream()
                 .map(produtoMapper::toResponse)
                 .collect(Collectors.toList());
@@ -63,7 +67,7 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public List<ProdutoResponse> listarAtivos() {
-        List<Produto> produtos = produtoRepository.findAllAtivos();
+        List<Produto> produtos = produtoRepository.findAllByAtivo(true);
         return produtos.stream()
                 .map(produtoMapper::toResponse)
                 .collect(Collectors.toList());
@@ -71,7 +75,7 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public List<ProdutoResponse> buscarEstoqueBaixo() {
-        List<Produto> produtos = produtoRepository.findEstoqueBaixo(10); // exemplo: mínimo de 10 unidades
+        List<Produto> produtos = produtoRepository.findAllByQuantidadeLessThan(10); // exemplo: mínimo de 10 unidades
         return produtos.stream()
                 .map(produtoMapper::toResponse)
                 .collect(Collectors.toList());

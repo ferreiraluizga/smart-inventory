@@ -1,24 +1,36 @@
 package com.ferreiraluizga.smartinventory.repository;
 
 import com.ferreiraluizga.smartinventory.entity.Produto;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+
+    @Override
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    List<Produto> findAll();
+
+    @Override
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    Optional<Produto> findById(Long id);
+
     // buscar produto por nome (contendo o texto)
-    @Query(value = "select * from produtos where nome like CONCAT('%', :nome, '%')", nativeQuery = true)
-    List<Produto> findByNome(@Param("nome") String nome);
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    List<Produto> findProdutoByNomeContaining(String nome);
 
     // listar produtos ativos
-    @Query(value =  "select * from produtos where ativo = true", nativeQuery = true)
-    List<Produto> findAllAtivos();
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    List<Produto> findAllByAtivo(Boolean ativo);
 
     // listar produtos com estoque baixo
-    @Query(value = "select * from produtos where quantidade < :minimo", nativeQuery = true)
-    List<Produto> findEstoqueBaixo(@Param("minimo") Integer minimo);
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    List<Produto> findAllByQuantidadeLessThan(Integer minimo);
+
 }
