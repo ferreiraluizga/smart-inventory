@@ -32,4 +32,7 @@ public class Fornecedor {
     @OneToMany(mappedBy = "fornecedor")
     private List<Produto> produtos;
 
+    @OneToMany(mappedBy = "fornecedor")
+    private List<Pedido> pedidos;
+
 }
