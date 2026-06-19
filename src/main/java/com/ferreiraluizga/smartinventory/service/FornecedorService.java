@@ -5,20 +5,22 @@ import com.ferreiraluizga.smartinventory.dto.response.FornecedorResponse;
 import com.ferreiraluizga.smartinventory.entity.Fornecedor;
 import com.ferreiraluizga.smartinventory.mapper.FornecedorMapper;
 import com.ferreiraluizga.smartinventory.repository.FornecedorRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FornecedorService {
 
     private final FornecedorRepository fornecedorRepository;
 
     private final FornecedorMapper fornecedorMapper;
 
+    @Transactional
     public FornecedorResponse salvar(FornecedorRequest dto) {
         if (fornecedorRepository.existsByCnpj(dto.cnpj())) {
             throw new RuntimeException("Já existe um fornecedor com o mesmo CNPJ");
@@ -32,16 +34,19 @@ public class FornecedorService {
         return fornecedorMapper.toResponse(fornecedorRepository.save(f));
     }
 
+    @Transactional
     public FornecedorResponse atualizar(FornecedorRequest dto, Long id) {
         Fornecedor f = fornecedorMapper.toEntity(dto);
         f.setId(id);
         return fornecedorMapper.toResponse(fornecedorRepository.save(f));
     }
 
+    @Transactional
     public void excluir(Long id) {
         fornecedorRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<FornecedorResponse> listarTodos() {
         List<Fornecedor> fornecedores = fornecedorRepository.findAll();
         return fornecedores.stream()
@@ -49,12 +54,14 @@ public class FornecedorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public FornecedorResponse buscarPorId(Long id) {
         Fornecedor fornecedor = fornecedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
         return fornecedorMapper.toResponse(fornecedor);
     }
 
+    @Transactional(readOnly = true)
     public List<FornecedorResponse> buscarPorNome(String nome) {
         List<Fornecedor> fornecedores = fornecedorRepository.findByNome(nome);
         return fornecedores.stream()

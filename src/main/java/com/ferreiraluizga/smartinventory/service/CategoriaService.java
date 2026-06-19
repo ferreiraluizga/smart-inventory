@@ -5,13 +5,14 @@ import com.ferreiraluizga.smartinventory.dto.response.CategoriaResponse;
 import com.ferreiraluizga.smartinventory.entity.Categoria;
 import com.ferreiraluizga.smartinventory.mapper.CategoriaMapper;
 import com.ferreiraluizga.smartinventory.repository.CategoriaRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class CategoriaService {
 
@@ -19,6 +20,7 @@ public class CategoriaService {
 
     private final CategoriaMapper categoriaMapper;
 
+    @Transactional
     public CategoriaResponse salvar(CategoriaRequest dto) {
         if (categoriaRepository.existsByNome(dto.nome())) {
             throw new RuntimeException("Já existe uma categoria com esse nome");
@@ -28,16 +30,19 @@ public class CategoriaService {
         return categoriaMapper.toResponse(categoriaRepository.save(c));
     }
 
+    @Transactional
     public CategoriaResponse atualizar(CategoriaRequest dto, Long id) {
         Categoria c = categoriaMapper.toEntity(dto);
         c.setId(id);
         return categoriaMapper.toResponse(categoriaRepository.save(c));
     }
 
+    @Transactional
     public void excluir(Long id) {
         categoriaRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoriaResponse> listarTodos() {
         List<Categoria> categorias = categoriaRepository.findAll();
         return categorias.stream()
@@ -45,6 +50,7 @@ public class CategoriaService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CategoriaResponse buscarPorId(Long id) {
         Categoria c = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));

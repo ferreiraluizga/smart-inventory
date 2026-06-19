@@ -7,18 +7,17 @@ import com.ferreiraluizga.smartinventory.entity.ItemVenda;
 import com.ferreiraluizga.smartinventory.entity.Produto;
 import com.ferreiraluizga.smartinventory.entity.Venda;
 import com.ferreiraluizga.smartinventory.mapper.VendaMapper;
-import com.ferreiraluizga.smartinventory.repository.ItemVendaRepository;
 import com.ferreiraluizga.smartinventory.repository.ProdutoRepository;
 import com.ferreiraluizga.smartinventory.repository.VendaRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class VendaService {
 
