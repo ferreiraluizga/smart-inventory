@@ -9,14 +9,13 @@ import com.ferreiraluizga.smartinventory.entity.Venda;
 import com.ferreiraluizga.smartinventory.mapper.VendaMapper;
 import com.ferreiraluizga.smartinventory.repository.ProdutoRepository;
 import com.ferreiraluizga.smartinventory.repository.VendaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -69,35 +68,6 @@ public class VendaService {
         v.setTotal(total);
 
         return vendaMapper.toResponse(vendaRepository.save(v));
-    }
-
-    @Transactional
-    public void excluir(Long id) {
-        Venda v = vendaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-
-        for (ItemVenda item : v.getItens()) {
-            Produto p = item.getProduto();
-            p.setQuantidade(p.getQuantidade() + item.getQuant());
-        }
-
-        vendaRepository.delete(v);
-    }
-
-    @Transactional(readOnly = true)
-    public List<VendaResponse> listarTodos() {
-        List<Venda> vendas = vendaRepository.findAll();
-        return vendas.stream()
-                .map(vendaMapper::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public VendaResponse buscarPorId(Long id) {
-        Venda v = vendaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-
-        return vendaMapper.toResponse(v);
     }
 
 }
