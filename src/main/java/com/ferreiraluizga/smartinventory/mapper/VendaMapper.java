@@ -6,6 +6,8 @@ import com.ferreiraluizga.smartinventory.entity.ItemVenda;
 import com.ferreiraluizga.smartinventory.entity.Venda;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class VendaMapper {
 
@@ -17,7 +19,7 @@ public class VendaMapper {
             venda.getFormaPagamento(),
             venda.getItens().stream()
                 .map(this::toItemVendaResponse)
-                .toList()
+                .collect(Collectors.toList())
         );
     }
 
