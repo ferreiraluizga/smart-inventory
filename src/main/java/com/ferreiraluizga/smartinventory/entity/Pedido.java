@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class Pedido {
 
     @Column(nullable = false)
     private double total;
+
+    @Column(name = "data_pedido", nullable = false)
+    private LocalDateTime dataPedido;
 
     @Column(name = "data_vencimento", nullable = false)
     private Date dataVencimento;

@@ -8,6 +8,7 @@ public record ItemVendaRequest(
         @NotNull(message = "O produto é obrigatório")
         Long produtoId,
 
+        @NotNull(message = "A quantidade é obrigatória")
         @Min(value = 1, message = "A quantidade deve ser no mínimo 1")
         int quant
 

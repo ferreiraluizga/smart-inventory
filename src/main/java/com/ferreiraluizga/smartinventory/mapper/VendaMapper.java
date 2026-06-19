@@ -13,22 +13,22 @@ public class VendaMapper {
 
     public VendaResponse toResponse(Venda venda) {
         return new VendaResponse(
-            venda.getId(),
-            venda.getDataVenda(),
-            venda.getTotal(),
-            venda.getFormaPagamento(),
-            venda.getItens().stream()
-                .map(this::toItemVendaResponse)
-                .collect(Collectors.toList())
+                venda.getId(),
+                venda.getDataVenda(),
+                venda.getTotal(),
+                venda.getFormaPagamento(),
+                venda.getItens().stream()
+                    .map(this::toItemVendaResponse)
+                    .collect(Collectors.toList())
         );
     }
 
     public ItemVendaResponse toItemVendaResponse(ItemVenda item) {
         return new ItemVendaResponse(
-            item.getProduto().getId(),
-            item.getProduto().getNome(),
-            item.getQuant(),
-            item.getSubtotal()
+                item.getProduto().getId(),
+                item.getProduto().getNome(),
+                item.getQuant(),
+                item.getSubtotal()
         );
     }
 
