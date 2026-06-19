@@ -19,7 +19,7 @@ public class CategoriaMapper {
     public Categoria toEntity(CategoriaRequest dto) {
         Categoria c = new Categoria();
         c.setNome(dto.nome());
-        c.setNome(dto.descricao());
+        c.setDescricao(dto.descricao());
         return c;
     }
 
