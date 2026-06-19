@@ -23,7 +23,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     // buscar produto por nome (contendo o texto)
     @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
-    List<Produto> findProdutoByNomeContaining(String nome);
+    List<Produto> findProdutoByNomeContainingIgnoreCaseOrderByNomeAsc(String nome);
 
     // listar produtos ativos
     @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
