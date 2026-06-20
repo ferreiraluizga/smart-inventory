@@ -20,20 +20,34 @@ services:
       retries: 5
 
   backend:
-    build: .
+    build: ./backend
     container_name: spring-backend
     restart: always
     ports:
       - "8080:8080"
     environment:
-      # Passando os valores exatos exigidos pelo seu novo application.yml
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/smartinventory
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin123
       - JWT_SECRET=ii7sLpvoQWuZS2GYq6BAljqSmmNr8LGtrBQSWfGgSRk=
+      - FRONTEND_URL=http://localhost:5173
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - smart_network
+
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
     networks:
       - smart_network
 
