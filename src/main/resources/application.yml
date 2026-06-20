@@ -17,3 +17,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   expiration: 86400000
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
