@@ -59,7 +59,7 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public List<ProdutoResponse> buscarPorNome(String nome) {
-        List<Produto> produtos = produtoRepository.findProdutoByNomeContaining(nome);
+        List<Produto> produtos = produtoRepository.findProdutoByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
         return produtos.stream()
                 .map(produtoMapper::toResponse)
                 .collect(Collectors.toList());
