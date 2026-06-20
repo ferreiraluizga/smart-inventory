@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -105,4 +106,31 @@ public class PedidoService {
         return pedidoMapper.toResponse(pedidoRepository.save(p));
     }
 
+    @Transactional
+    public void excluir(Long id) {
+        Pedido p = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        if (p.getStatus() == StatusPagamento.PAGO) {
+            throw new RuntimeException("Não é possível excluir um pedido que já foi pago");
+        }
+
+        pedidoRepository.delete(p);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PedidoResponse> listarTodos() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        return pedidos.stream()
+                .map(pedidoMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public PedidoResponse buscarPorId(Long id) {
+        Pedido p = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        return pedidoMapper.toResponse(p);
+    }
 }
