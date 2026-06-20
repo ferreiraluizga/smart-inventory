@@ -30,6 +30,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/smartinventory
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin123
+      - JWT_SECRET=ii7sLpvoQWuZS2GYq6BAljqSmmNr8LGtrBQSWfGgSRk=
     depends_on:
       postgres:
         condition: service_healthy
