@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${app.frontend.url}")
+    @Value("${app.frontend-url}")
     private String frontendUrl;
 
     private static final String[] ROTAS_PUBLICAS = {
