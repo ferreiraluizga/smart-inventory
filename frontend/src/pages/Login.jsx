@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authService } from "../services/authService";
 
@@ -8,14 +8,6 @@ function Login() {
     const [senha, setSenha] = useState("");
 
     const navigate = useNavigate();
-
-    useEffect(
-        () => {
-            if (authService.isAuthenticated()) {
-                navigate("/dashboard");
-            }
-        }, [navigate]
-    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();

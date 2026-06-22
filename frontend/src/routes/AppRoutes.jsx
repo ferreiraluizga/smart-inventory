@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 
 import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 import Register from "../pages/Register";
 
 export default function AppRoutes() {
@@ -12,9 +13,32 @@ export default function AppRoutes() {
     return (
         <Routes>
 
-            <Route path="/" element={<Welcome />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+                path="/"
+                element={
+                    <PublicRoute>
+                        <Welcome />
+                    </PublicRoute>
+                }
+            />
+
+            <Route
+                path="/login"
+                element={
+                    <PublicRoute>
+                        <Login />
+                    </PublicRoute>
+                }
+            />
+
+            <Route
+                path="/register"
+                element={
+                    <PublicRoute>
+                        <Register />
+                    </PublicRoute>
+                }
+            />
 
             <Route
                 path="/dashboard"
