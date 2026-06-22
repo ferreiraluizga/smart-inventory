@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
+import Input from "../components/form/Input";
+import InputSenha from "../components/form/InputSenha";
 
 function Register() {
 
@@ -9,6 +11,16 @@ function Register() {
     const [senha, setSenha] = useState("");
     const [dataNasc, setDataNasc] = useState("");
     const [cpf, setCpf] = useState("");
+
+    const formatarCPF = (valor) => {
+        const apenasNumeros = valor.replace(/\D/g, "");
+
+        return apenasNumeros
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    };
+
 
     const [visibilidadeSenha, setVisibilidadeSenha] = useState(false);
 
@@ -30,10 +42,9 @@ function Register() {
         }
     }
 
-    return(
+    return (
         <div className="container-fluid vh-100">
             <div className="row h-100">
-
                 <div className="col-md-6 d-none d-md-flex bg-primary text-white justify-content-center align-items-center">
                     <div className="text-center">
                         <h1 className="display-4 fw-bold">
@@ -47,107 +58,67 @@ function Register() {
                 </div>
 
                 <div className="col-md-6 d-flex justify-content-center align-items-center">
-
                     <div className="card shadow border-0 p-4"
                         style={{ width: "100%", maxWidth: "450px" }}>
-
                         <div className="card-body">
-
-                            <h2 className="text-center mb-4">
-                                Cadastrar
-                            </h2>
+                            <h2 className="text-center mb-4">Cadastrar</h2>
 
                             <form onSubmit={handleSubmit}>
+                                <Input 
+                                    label="Nome Completo"
+                                    margin="mb-3"
+                                    type="text"
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
+                                    required
+                                />
 
-                                <div className="mb-3">
-                                    <label>Nome Completo</label>
+                                <Input 
+                                    label="Data de Nascimento"
+                                    margin="mb-3"
+                                    type="date"
+                                    value={dataNasc}
+                                    onChange={(e) => setDataNasc(e.target.value)}
+                                    required
+                                />
 
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={nome}
-                                        onChange={(e) => setNome(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                                <Input 
+                                    label="CPF"
+                                    margin="mb-3"
+                                    type="text"
+                                    minLength={14}
+                                    maxLength={14}
+                                    value={cpf}
+                                    onChange={(e) => setCpf(formatarCPF(e.target.value))}
+                                    required
+                                />
 
-                                <div className="mb-3">
-                                    <label>Data de Nascimento</label>
+                                <Input 
+                                    label="E-mail"
+                                    margin="mb-3"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
 
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        value={dataNasc}
-                                        onChange={(e) => setDataNasc(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label>CPF</label>
-
-                                    <input
-                                        type="text"
-                                        minLength={11}
-                                        maxLength={11}
-                                        className="form-control"
-                                        value={cpf}
-                                        onChange={(e) => setCpf(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label>Email</label>
-
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="mb-4">
-                                    <label>Senha</label>
-                                    <div className="input-group mb-3">
-                                        <input
-                                            type={visibilidadeSenha ? "text" : "password"}
-                                            className="form-control"
-                                            value={senha}
-                                            onChange={(e) => setSenha(e.target.value)}
-                                            required
-                                        />
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-outline-dark" 
-                                            onClick={alterarVisibilidadeSenha}
-                                        >
-                                            <i className={`bi ${visibilidadeSenha ? "bi-eye-slash" : "bi-eye"}`}></i>
-                                        </button>
-                                    </div>
-                                </div>
-
+                                <InputSenha 
+                                    margin="mb-4"
+                                    value={senha}
+                                    onChange={(e) => setSenha(e.target.value)}
+                                />
                             </form>
 
                             <div className="text-center mt-3">
-
                                 <span>Já possui uma conta?</span>
-
                                 <br />
-
                                 <Link to="/login" className="text-decoration-none">
                                     Fazer login
                                 </Link>
-
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     );
