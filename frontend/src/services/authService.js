@@ -11,6 +11,29 @@ export const authService = {
             }
         );
 
+        if (response.data && response.data.token) {
+            localStorage.setItem("token", response.data.token);
+        }
+
+        return response.data;
+    },
+
+    async register(nome, email, senha, dataNasc, cpf) {
+        const response = await api.post(
+            "/auth/registrar",
+            {
+                nome,
+                email,
+                senha,
+                dataNasc,
+                cpf
+            }
+        );
+
+        if (response.status === 201) {
+            await this.login(email, senha);
+        }
+
         return response.data;
     },
 

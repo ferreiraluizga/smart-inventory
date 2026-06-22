@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authService } from "../services/authService";
 
@@ -9,16 +9,20 @@ function Login() {
 
     const navigate = useNavigate();
 
+    useEffect(
+        () => {
+            if (authService.isAuthenticated()) {
+                navigate("/dashboard");
+            }
+        }, [navigate]
+    );
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await authService.login(email, senha);
-
-            localStorage.setItem("token", response.token);
-
+            await authService.login(email, senha);
             navigate("/dashboard");
-
         } catch (error) {
             console.error(error);
             alert("Email ou senha inválidos");
