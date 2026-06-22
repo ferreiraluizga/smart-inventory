@@ -7,7 +7,13 @@ function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
+    const [visibilidadeSenha, setVisibilidadeSenha] = useState(false);
+
     const navigate = useNavigate();
+
+    const alterarVisibilidadeSenha = () => {
+        setVisibilidadeSenha(antigoValor => !antigoValor);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,18 +64,28 @@ function Login() {
                                         className="form-control"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        required
                                     />
                                 </div>
 
                                 <div className="mb-4">
                                     <label>Senha</label>
-
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={senha}
-                                        onChange={(e) => setSenha(e.target.value)}
-                                    />
+                                    <div className="input-group mb-3">
+                                        <input
+                                            type={visibilidadeSenha ? "text" : "password"}
+                                            className="form-control"
+                                            value={senha}
+                                            onChange={(e) => setSenha(e.target.value)}
+                                            required
+                                        />
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-outline-dark" 
+                                            onClick={alterarVisibilidadeSenha}
+                                        >
+                                            <i className={`bi ${visibilidadeSenha ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button

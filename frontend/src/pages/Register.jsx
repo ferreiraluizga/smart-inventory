@@ -10,7 +10,13 @@ function Register() {
     const [dataNasc, setDataNasc] = useState("");
     const [cpf, setCpf] = useState("");
 
+    const [visibilidadeSenha, setVisibilidadeSenha] = useState(false);
+
     const navigate = useNavigate();
+
+    const alterarVisibilidadeSenha = () => {
+        setVisibilidadeSenha(antigoValor => !antigoValor);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -61,6 +67,7 @@ function Register() {
                                         className="form-control"
                                         value={nome}
                                         onChange={(e) => setNome(e.target.value)}
+                                        required
                                     />
                                 </div>
 
@@ -72,6 +79,7 @@ function Register() {
                                         className="form-control"
                                         value={dataNasc}
                                         onChange={(e) => setDataNasc(e.target.value)}
+                                        required
                                     />
                                 </div>
 
@@ -80,9 +88,12 @@ function Register() {
 
                                     <input
                                         type="text"
+                                        minLength={11}
+                                        maxLength={11}
                                         className="form-control"
                                         value={cpf}
                                         onChange={(e) => setCpf(e.target.value)}
+                                        required
                                     />
                                 </div>
 
@@ -94,26 +105,29 @@ function Register() {
                                         className="form-control"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        required
                                     />
                                 </div>
 
                                 <div className="mb-4">
                                     <label>Senha</label>
-
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={senha}
-                                        onChange={(e) => setSenha(e.target.value)}
-                                    />
+                                    <div className="input-group mb-3">
+                                        <input
+                                            type={visibilidadeSenha ? "text" : "password"}
+                                            className="form-control"
+                                            value={senha}
+                                            onChange={(e) => setSenha(e.target.value)}
+                                            required
+                                        />
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-outline-dark" 
+                                            onClick={alterarVisibilidadeSenha}
+                                        >
+                                            <i className={`bi ${visibilidadeSenha ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary w-100"
-                                >
-                                    Cadastrar
-                                </button>
 
                             </form>
 
