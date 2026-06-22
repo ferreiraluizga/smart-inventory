@@ -7,6 +7,7 @@ import Dashboard from "../pages/Dashboard";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Register from "../pages/Register";
+import Marcas from "../pages/Marcas";
 
 export default function AppRoutes() {
 
@@ -45,6 +46,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Dashboard />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route 
+                path="/dashboard/marcas"
+                element={
+                    <PrivateRoute>
+                        <Marcas />
                     </PrivateRoute>
                 }
             />

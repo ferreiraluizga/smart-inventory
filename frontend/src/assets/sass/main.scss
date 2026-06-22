@@ -3,3 +3,40 @@
 body {
   background-color: #f8f9fa;
 }
+
+.sidebar-link:hover {
+    opacity: 1 !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.sidebar-link {
+    transition: all 0.2s ease-in-out !important;
+}
+
+.menu-mobile-retratil {
+    max-height: 0px;
+    opacity: 0;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    overflow: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-mobile-retratil.aberto {
+    max-height: 200px; 
+    opacity: 1;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    transform: translateY(0);
+}
+
+.conteudo-menu-mobile {
+    transition: opacity 0.2s ease;
+    opacity: 0;
+}
+.menu-mobile-retratil.aberto .conteudo-menu-mobile {
+    opacity: 1;
+    transition-delay: 0.1s;
+}
