@@ -1,4 +1,4 @@
-function Input({label, margin, type, value, onChange, minLength, maxLength, required = false}) {
+function Input({label, margin, type, value, onChange, minLength, maxLength, required = false, disabled = false, placeholder}) {
     return (
         <div className={margin}>
             <label>{label}</label>
@@ -10,6 +10,8 @@ function Input({label, margin, type, value, onChange, minLength, maxLength, requ
                 minLength={minLength}
                 maxLength={maxLength}
                 required={required}
+                disabled={disabled}
+                placeholder={placeholder}
             />
         </div>
     );

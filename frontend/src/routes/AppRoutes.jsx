@@ -8,6 +8,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Register from "../pages/Register";
 import Marcas from "../pages/marcas/Marcas";
+import Categorias from "../pages/categorias/Categorias";
 
 export default function AppRoutes() {
 
@@ -55,6 +56,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Marcas />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route 
+                path="/dashboard/categorias"
+                element={
+                    <PrivateRoute>
+                        <Categorias />
                     </PrivateRoute>
                 }
             />

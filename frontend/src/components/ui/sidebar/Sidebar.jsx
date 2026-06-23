@@ -35,6 +35,7 @@ function Sidebar() {
                     <div className="d-none d-md-flex flex-row align-items-center gap-2">
                         <SidebarItem url="/dashboard" title="Dashboard" icon="grid-1x2" />
                         <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
+                        <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
                     </div>
 
                     <button

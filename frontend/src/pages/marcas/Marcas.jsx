@@ -6,6 +6,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import Modal from "../../components/ui/Modal";
 import Header from "../../components/ui/Header";
 import Card from "../../components/ui/Card";
+import Toast from "../../components/ui/Toast";
 import FormEditarMarca from "./FormEditarMarca";
 import FormExcluirMarca from "./FormExcluirMarca";
 import FormCadastrarMarca from "./FormCadastrarMarca";
@@ -14,11 +15,18 @@ function Marcas() {
     const [marcas, setMarcas] = useState([]);
     const [busca, setBusca] = useState("");
 
-    const [modalAberto, setModalAberto] = useState(false);
+    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
     useEffect(() => {
         carregarMarcas();
     }, []);
+
+    const mostrarToast = (mensagem, tipo = "danger") => {
+        setToast({ visivel: true, mensagem, tipo });
+        setTimeout(() => {
+            setToast({ visivel: false, mensagem: "", tipo: "danger" });
+        }, 4000);
+    };
 
     const carregarMarcas = async () => {
         try {
@@ -26,6 +34,7 @@ function Marcas() {
             setMarcas(dados || []);
         } catch (error) {
             console.error("Erro ao listar marcas:", error);
+            mostrarToast("Erro ao carregar a lista de marcas do servidor.");
         }
     };
 
@@ -35,20 +44,28 @@ function Marcas() {
 
     const handleMarcaCriada = (novaMarca) => {
         setMarcas((marcasAnteriores) => [...marcasAnteriores, novaMarca]);
+        mostrarToast("Marca cadastrada com sucesso!", "success");
+    };
+
+    const handleMarcaErro = (mensagemErro) => {
+        mostrarToast(mensagemErro, "danger");
     };
 
     const handleMarcaAtualizada = (marcaEditada) => {
         setMarcas((marcasAnteriores) =>
             marcasAnteriores.map((m) => (m.id === marcaEditada.id ? marcaEditada : m))
         );
+        mostrarToast("Marca atualizada com sucesso!", "success");
     };
 
     const handleMarcaExcluida = async (id) => {
         try {
             await marcaService.excluir(id);
             setMarcas((marcasAnteriores) => marcasAnteriores.filter((m) => m.id !== id));
+            mostrarToast("Marca excluída com sucesso!", "success");
         } catch (error) {
             console.error("Erro ao excluir marca:", error);
+            mostrarToast("Não foi possível excluir a marca. Vinculada a produtos?");
         }
     };
 
@@ -68,7 +85,7 @@ function Marcas() {
                 id={"modalMarca"}
                 title={"Cadastrar marca"}
             >
-                <FormCadastrarMarca onCadastrar={handleMarcaCriada} />
+                <FormCadastrarMarca onCadastrar={handleMarcaCriada} onErro={handleMarcaErro} />
             </Modal>
 
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
@@ -81,11 +98,11 @@ function Marcas() {
                             buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
                         />
 
-                        {/* MODAL DE EDIÇÃO */}
                         <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
                             <FormEditarMarca
                                 marca={marca}
                                 onSalvar={handleMarcaAtualizada}
+                                onErro={handleMarcaErro}
                             />
                         </Modal>
 
@@ -108,6 +125,13 @@ function Marcas() {
                     <p className="mt-2">Nenhuma marca encontrada com esse nome.</p>
                 </div>
             )}
+
+            <Toast 
+                visivel={toast.visivel} 
+                mensagem={toast.mensagem} 
+                tipo={toast.tipo} 
+                onClose={() => setToast({ ...toast, visivel: false })}
+            />
         </DashboardLayout>
     );
 }

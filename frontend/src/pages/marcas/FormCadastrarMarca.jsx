@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { marcaService } from "../../services/marcaService";
+import Input from "../../components/form/Input";
 
-function FormCadastrarMarca({ onCadastrar }) {
+function FormCadastrarMarca({ onCadastrar, onErro }) {
     const [nome, setNome] = useState("");
     const [carregando, setCarregando] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setCarregando(true);
+
         try {
             const novaMarca = await marcaService.salvar(nome);
-            
+
             if (onCadastrar) {
                 onCadastrar(novaMarca);
             }
@@ -18,7 +20,10 @@ function FormCadastrarMarca({ onCadastrar }) {
             setNome("");
         } catch (error) {
             console.error("Erro ao cadastrar marca:", error);
-            alert("Não foi possível cadastrar a marca.");
+            
+            if (onErro) {
+                onErro("Não foi possível cadastrar a marca. Tente novamente.");
+            }
         } finally {
             setCarregando(false);
         }
@@ -26,21 +31,16 @@ function FormCadastrarMarca({ onCadastrar }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <label htmlFor="nomeNovaMarca" className="form-label fw-semibold text-secondary">
-                    Nome da Nova Marca
-                </label>
-                <input
-                    type="text"
-                    className="form-control form-control-lg rounded-3 fs-6"
-                    id="nomeNovaMarca"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Ex: Nike, Apple, Samsung..."
-                    required
-                    disabled={carregando}
-                />
-            </div>
+            <Input
+                label="Nome"
+                margin="mb-3"
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+                disabled={carregando}
+                placeholder="Digite o nome da marca"
+            />
 
             <div className="d-flex justify-content-end gap-2 mt-4">
                 <button
