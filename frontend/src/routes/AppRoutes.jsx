@@ -7,7 +7,7 @@ import Dashboard from "../pages/Dashboard";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Register from "../pages/Register";
-import Marcas from "../pages/Marcas";
+import Marcas from "../pages/marcas/Marcas";
 
 export default function AppRoutes() {
 
