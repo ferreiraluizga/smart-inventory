@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { categoriaService } from "../../services/categoriaService";
+import Input from "../../components/form/Input";
+import TextArea from "../../components/form/TextArea";
+import ModalButton from "../../components/ui/ModalButton";
 
 function FormEditarCategoria({ categoria, onSalvar, onErro }) {
     const [nome, setNome] = useState(categoria.nome);
     const [descricao, setDescricao] = useState(categoria.descricao || "");
+
     const [carregando, setCarregando] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -11,7 +15,6 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
         setCarregando(true);
         
         try {
-            // Chama o serviço passando a ID, o novo nome e a nova descrição
             const categoriaAtualizada = await categoriaService.atualizar(categoria.id, nome, descricao);
             
             if (onSalvar) {
@@ -20,7 +23,6 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
         } catch (error) {
             console.error("Erro ao atualizar categoria:", error);
             
-            // Dispara o erro para o Toast da tela principal (Categorias.jsx)
             if (onErro) {
                 onErro("Não foi possível salvar as alterações da categoria.");
             }
@@ -31,58 +33,42 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            {/* CAMPO NOME */}
-            <div className="mb-3">
-                <label htmlFor={`nomeCat-${categoria.id}`} className="form-label fw-semibold text-secondary">
-                    Nome da Categoria
-                </label>
-                <input
-                    type="text"
-                    className="form-control form-control-lg rounded-3 fs-6"
-                    id={`nomeCat-${categoria.id}`}
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Ex: Alimentos, Eletrônicos..."
-                    required
-                    disabled={carregando}
-                />
-            </div>
+            <Input
+                label="Nome"
+                margin="mb-3"
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+                disabled={carregando}
+                placeholder="Digite o nome da categoria"
+            />
 
-            {/* CAMPO DESCRIÇÃO */}
-            <div className="mb-3">
-                <label htmlFor={`descCat-${categoria.id}`} className="form-label fw-semibold text-secondary">
-                    Descrição
-                </label>
-                <textarea
-                    className="form-control form-control-lg rounded-3 fs-6"
-                    id={`descCat-${categoria.id}`}
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
-                    placeholder="Digite uma breve descrição sobre a categoria..."
-                    required
-                    disabled={carregando}
-                    rows="3"
-                />
-            </div>
+            <TextArea 
+                label="Descrição"
+                margin="mb-3"
+                onChange={(e) => setDescricao(e.target.value)}
+                placeholder="Digite a descrição da categoria"
+                value={descricao}
+                rows="3"
+                disabled={carregando}
+                required
+            />
 
-            {/* BOTÕES DE AÇÃO */}
             <div className="d-flex justify-content-end gap-2 mt-4">
-                <button
+                <ModalButton 
                     type="button"
-                    className="btn btn-light rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="light"
                     disabled={carregando}
-                >
-                    Cancelar
-                </button>
-                <button
+                    buttonText="Cancelar"
+                />
+                
+                <ModalButton 
                     type="submit"
-                    className="btn btn-primary rounded-3 px-4"
-                    data-bs-dismiss="modal" // Fecha se der sucesso. Se der erro, o Toast avisa na tela pai
+                    color="primary"
                     disabled={carregando}
-                >
-                    {carregando ? "Salvando..." : "Salvar Alterações"}
-                </button>
+                    buttonText={carregando ? "Salvando..." : "Salvar alterações"}
+                />
             </div>
         </form>
     );

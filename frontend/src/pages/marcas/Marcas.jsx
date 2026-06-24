@@ -17,6 +17,8 @@ function Marcas() {
 
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         carregarMarcas();
     }, []);
@@ -30,11 +32,14 @@ function Marcas() {
 
     const carregarMarcas = async () => {
         try {
+            setLoading(true);
             const dados = await marcaService.listarTodos();
             setMarcas(dados || []);
         } catch (error) {
             console.error("Erro ao listar marcas:", error);
             mostrarToast("Erro ao carregar a lista de marcas do servidor.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -88,36 +93,44 @@ function Marcas() {
                 <FormCadastrarMarca onCadastrar={handleMarcaCriada} onErro={handleMarcaErro} />
             </Modal>
 
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                {marcasFiltradas.map((marca) => (
-                    <div className="col" key={marca.id}>
-                        <Card
-                            icon="bookmark-dash"
-                            title={marca.nome}
-                            buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
-                            buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
-                        />
-
-                        <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
-                            <FormEditarMarca
-                                marca={marca}
-                                onSalvar={handleMarcaAtualizada}
-                                onErro={handleMarcaErro}
-                            />
-                        </Modal>
-
-                        <Modal
-                            id={`modalExcluirMarca-${marca.id}`}
-                            title="Excluir marca"
-                        >
-                            <FormExcluirMarca
-                                marca={marca}
-                                onExcluir={handleMarcaExcluida}
-                            />
-                        </Modal>
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center py-5">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Carregando...</span>
                     </div>
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                    {marcasFiltradas.map((marca) => (
+                        <div className="col" key={marca.id}>
+                            <Card
+                                icon="bookmark-dash"
+                                title={marca.nome}
+                                buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
+                                buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
+                            />
+
+                            <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
+                                <FormEditarMarca
+                                    marca={marca}
+                                    onSalvar={handleMarcaAtualizada}
+                                    onErro={handleMarcaErro}
+                                />
+                            </Modal>
+
+                            <Modal
+                                id={`modalExcluirMarca-${marca.id}`}
+                                title="Excluir marca"
+                            >
+                                <FormExcluirMarca
+                                    marca={marca}
+                                    onExcluir={handleMarcaExcluida}
+                                />
+                            </Modal>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {marcasFiltradas.length === 0 && (
                 <div className="text-center text-muted mt-5 py-5">
@@ -126,10 +139,10 @@ function Marcas() {
                 </div>
             )}
 
-            <Toast 
-                visivel={toast.visivel} 
-                mensagem={toast.mensagem} 
-                tipo={toast.tipo} 
+            <Toast
+                visivel={toast.visivel}
+                mensagem={toast.mensagem}
+                tipo={toast.tipo}
                 onClose={() => setToast({ ...toast, visivel: false })}
             />
         </DashboardLayout>

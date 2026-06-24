@@ -5,7 +5,7 @@ import Header from "../../components/ui/Header";
 import Modal from "../../components/ui/Modal";
 import FormCadastrarCategoria from "./FormCadastrarCategoria";
 import FormEditarCategoria from "./FormEditarCategoria";
-import FormExcluirCategoria from "./FormExcluirCategoria"; // 1. CORREÇÃO: Importação adicionada
+import FormExcluirCategoria from "./FormExcluirCategoria";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
 
@@ -14,6 +14,8 @@ function Categorias() {
     const [busca, setBusca] = useState("");
 
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         carregarCategorias();
@@ -25,15 +27,17 @@ function Categorias() {
 
     const carregarCategorias = async () => {
         try {
+            setLoading(true);
             const dados = await categoriaService.listarTodos();
             setCategorias(dados || []);
         } catch (error) {
             console.error("Erro ao listar categorias: ", error);
             mostrarToast("Erro ao carregar a lista de categorias.");
+        } finally {
+            setLoading(false);
         }
     }
 
-    // 2. CORREÇÃO: Ajustado para .toLowerCase() com 'C' maiúsculo
     const categoriasFiltradas = categorias.filter(c =>
         c.nome.toLowerCase().includes(busca.toLowerCase())
     );
@@ -49,7 +53,6 @@ function Categorias() {
 
     const handleCategoriaAtualizada = (categoriaEditada) => {
         setCategorias((categoriasAnteriores) =>
-            // 3. CORREÇÃO: Trocado de ': m' para ': c' para combinar com o mapa
             categoriasAnteriores.map((c) => (c.id === categoriaEditada.id ? categoriaEditada : c))
         );
         mostrarToast("Categoria atualizada com sucesso!", "success");
@@ -57,7 +60,6 @@ function Categorias() {
 
     const handleCategoriaExcluida = async (id) => {
         try {
-            // 4. CORREÇÃO: Mudado de 'marcaService' para 'categoriaService'
             await categoriaService.excluir(id);
             setCategorias((categoriasAnteriores) => categoriasAnteriores.filter((c) => c.id !== id));
             mostrarToast("Categoria excluída com sucesso!", "success");
@@ -83,42 +85,49 @@ function Categorias() {
                 id={"modalCategoria"}
                 title={"Cadastrar categoria"}
             >
-                {/* 5. CORREÇÃO: Adicionado o onErro aqui também */}
                 <FormCadastrarCategoria onCadastrar={handleCategoriaCriada} onErro={handleCategoriaErro} />
             </Modal>
 
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                {categoriasFiltradas.map((categoria) => (
-                    <div className="col" key={categoria.id}>
-                        <Card
-                            icon="bookmark-dash"
-                            title={categoria.nome}
-                            buttonEditarTarget={`#modalEditarCategoria-${categoria.id}`}
-                            buttonExcluirTarget={`#modalExcluirCategoria-${categoria.id}`}
-                        >
-                            <p>{categoria.descricao}</p>
-                        </Card>
-
-                        <Modal id={`modalEditarCategoria-${categoria.id}`} title="Editar categoria">
-                            <FormEditarCategoria
-                                categoria={categoria}
-                                onSalvar={handleCategoriaAtualizada}
-                                onErro={handleCategoriaErro}
-                            />
-                        </Modal>
-
-                        <Modal
-                            id={`modalExcluirCategoria-${categoria.id}`}
-                            title="Excluir categoria"
-                        >
-                            <FormExcluirCategoria
-                                categoria={categoria}
-                                onExcluir={handleCategoriaExcluida}
-                            />
-                        </Modal>
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center py-5">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Carregando...</span>
                     </div>
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                    {categoriasFiltradas.map((categoria) => (
+                        <div className="col" key={categoria.id}>
+                            <Card
+                                icon="bookmark-dash"
+                                title={categoria.nome}
+                                buttonEditarTarget={`#modalEditarCategoria-${categoria.id}`}
+                                buttonExcluirTarget={`#modalExcluirCategoria-${categoria.id}`}
+                            >
+                                <p>{categoria.descricao}</p>
+                            </Card>
+
+                            <Modal id={`modalEditarCategoria-${categoria.id}`} title="Editar categoria">
+                                <FormEditarCategoria
+                                    categoria={categoria}
+                                    onSalvar={handleCategoriaAtualizada}
+                                    onErro={handleCategoriaErro}
+                                />
+                            </Modal>
+
+                            <Modal
+                                id={`modalExcluirCategoria-${categoria.id}`}
+                                title="Excluir categoria"
+                            >
+                                <FormExcluirCategoria
+                                    categoria={categoria}
+                                    onExcluir={handleCategoriaExcluida}
+                                />
+                            </Modal>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {categoriasFiltradas.length === 0 && (
                 <div className="text-center text-muted mt-5 py-5">

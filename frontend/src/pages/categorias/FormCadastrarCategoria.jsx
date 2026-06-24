@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { categoriaService } from "../../services/categoriaService";
 import Input from "../../components/form/Input";
+import TextArea from "../../components/form/TextArea";
+import ModalButton from "../../components/ui/ModalButton";
 
 function FormCadastrarCategoria({ onCadastrar, onErro }) {
     const [nome, setNome] = useState("");
@@ -45,34 +47,31 @@ function FormCadastrarCategoria({ onCadastrar, onErro }) {
                 placeholder="Digite o nome da categoria"
             />
 
-            <Input
+            <TextArea 
                 label="Descrição"
                 margin="mb-3"
-                type="text"
-                value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
-                required
-                disabled={carregando}
                 placeholder="Digite a descrição da categoria"
+                value={descricao}
+                rows="3"
+                disabled={carregando}
+                required
             />
 
             <div className="d-flex justify-content-end gap-2 mt-4">
-                <button
+                <ModalButton 
                     type="button"
-                    className="btn btn-light rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="light"
                     disabled={carregando}
-                >
-                    Cancelar
-                </button>
-                <button
+                    buttonText="Cancelar"
+                />
+                
+                <ModalButton 
                     type="submit"
-                    className="btn btn-primary rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="primary"
                     disabled={carregando}
-                >
-                    {carregando ? "Cadastrando..." : "Cadastrar"}
-                </button>
+                    buttonText={carregando ? "Cadastrando..." : "Cadastrar"}
+                />
             </div>
         </form>
     );
