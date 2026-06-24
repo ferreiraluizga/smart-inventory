@@ -5,7 +5,7 @@ import Header from "../../components/ui/Header";
 import Modal from "../../components/ui/Modal";
 import FormCadastrarCategoria from "./FormCadastrarCategoria";
 import FormEditarCategoria from "./FormEditarCategoria";
-import FormExcluirCategoria from "./FormExcluirCategoria";
+import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
 
@@ -115,15 +115,17 @@ function Categorias() {
                                 />
                             </Modal>
 
-                            <Modal
+                            <ModalConfirmacao
                                 id={`modalExcluirCategoria-${categoria.id}`}
-                                title="Excluir categoria"
-                            >
-                                <FormExcluirCategoria
-                                    categoria={categoria}
-                                    onExcluir={handleCategoriaExcluida}
-                                />
-                            </Modal>
+                                titulo="Você tem certeza"
+                                descricao={
+                                    <span>
+                                        Você excluirá a categoria <strong className="text-dark">{categoria.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
+                                    </span>
+                                }
+                                onConfirmar={() => handleCategoriaExcluida(categoria.id)}
+                                tipo="danger"
+                            />
                         </div>
                     ))}
                 </div>

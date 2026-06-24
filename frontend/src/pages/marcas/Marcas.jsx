@@ -8,8 +8,8 @@ import Header from "../../components/ui/Header";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
 import FormEditarMarca from "./FormEditarMarca";
-import FormExcluirMarca from "./FormExcluirMarca";
 import FormCadastrarMarca from "./FormCadastrarMarca";
+import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 
 function Marcas() {
     const [marcas, setMarcas] = useState([]);
@@ -118,15 +118,17 @@ function Marcas() {
                                 />
                             </Modal>
 
-                            <Modal
+                            <ModalConfirmacao 
                                 id={`modalExcluirMarca-${marca.id}`}
-                                title="Excluir marca"
-                            >
-                                <FormExcluirMarca
-                                    marca={marca}
-                                    onExcluir={handleMarcaExcluida}
-                                />
-                            </Modal>
+                                titulo="Você tem certeza"
+                                descricao={
+                                    <span>
+                                        Você excluirá a marca <strong className="text-dark">{marca.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
+                                    </span>
+                                }
+                                onConfirmar={() => handleMarcaExcluida(marca.id)}
+                                tipo="danger"
+                            />
                         </div>
                     ))}
                 </div>
