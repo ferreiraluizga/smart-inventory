@@ -104,7 +104,7 @@ function Marcas() {
                     {marcasFiltradas.map((marca) => (
                         <div className="col" key={marca.id}>
                             <Card
-                                icon="bookmark-dash"
+                                icon="tag"
                                 title={marca.nome}
                                 buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
                                 buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}

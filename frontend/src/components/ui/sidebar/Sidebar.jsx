@@ -12,28 +12,32 @@ function Sidebar() {
         navigate("/login");
     };
 
+    const handleDash = () => {
+        navigate("/dashboard");
+    }
+
     return (
         <div className="fixed-bottom w-100 p-3" style={{ zIndex: 1030 }}>
 
             <div className={`bg-dark shadow-lg rounded-4 p-3 mb-2 d-md-none menu-mobile-retratil ${menuAberto ? 'aberto' : ''}`}>
                 <div className="d-flex flex-wrap justify-content-around gap-3 conteudo-menu-mobile">
-                    <SidebarItem url="/dashboard" title="Dashboard" icon="grid-1x2" />
                     <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
+                    <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
                 </div>
             </div>
 
             <div className="bg-dark shadow-lg rounded-4 d-flex flex-row align-items-center p-2"
                 style={{ minHeight: "65px" }}>
                 <div className="d-flex align-items-center text-dark gap-2 px-2" style={{ minWidth: "48px" }}>
-                    <div className="bg-warning rounded-3 d-flex align-items-center justify-content-center fw-bold text-dark shadow-sm"
-                        style={{ width: "36px", height: "36px", fontSize: "14px", letterSpacing: "0.5px" }}>
+                    <button className="border-0 bg-warning rounded-3 d-flex align-items-center justify-content-center fw-bold text-dark shadow-sm"
+                        style={{ width: "36px", height: "36px", fontSize: "14px", letterSpacing: "0.5px" }}
+                        onClick={handleDash}>
                         SI
-                    </div>
+                    </button>
                 </div>
 
                 <div className="d-flex flex-grow-1 justify-content-center">
                     <div className="d-none d-md-flex flex-row align-items-center gap-2">
-                        <SidebarItem url="/dashboard" title="Dashboard" icon="grid-1x2" />
                         <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
                         <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
                     </div>
