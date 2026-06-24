@@ -44,3 +44,8 @@ body {
     opacity: 1;
     transition-delay: 0.1s;
 }
+
+.input-custom-focus:focus {
+    border-color: #ffc107 !important;
+    outline: 0 !important;
+}

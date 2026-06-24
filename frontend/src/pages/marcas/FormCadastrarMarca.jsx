@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { marcaService } from "../../services/marcaService";
 import Input from "../../components/form/Input";
+import ModalButton from "../../components/ui/ModalButton";
 
 function FormCadastrarMarca({ onCadastrar, onErro }) {
     const [nome, setNome] = useState("");
@@ -43,22 +44,19 @@ function FormCadastrarMarca({ onCadastrar, onErro }) {
             />
 
             <div className="d-flex justify-content-end gap-2 mt-4">
-                <button
+                <ModalButton 
                     type="button"
-                    className="btn btn-light rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="light"
                     disabled={carregando}
-                >
-                    Cancelar
-                </button>
-                <button
+                    buttonText="Cancelar"
+                />
+                
+                <ModalButton 
                     type="submit"
-                    className="btn btn-primary rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="warning"
                     disabled={carregando}
-                >
-                    {carregando ? "Cadastrando..." : "Cadastrar"}
-                </button>
+                    buttonText={carregando ? "Cadastrando..." : "Cadastrar"}
+                />
             </div>
         </form>
     );

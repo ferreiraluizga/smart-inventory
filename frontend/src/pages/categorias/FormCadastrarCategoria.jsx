@@ -68,7 +68,7 @@ function FormCadastrarCategoria({ onCadastrar, onErro }) {
                 
                 <ModalButton 
                     type="submit"
-                    color="primary"
+                    color="warning"
                     disabled={carregando}
                     buttonText={carregando ? "Cadastrando..." : "Cadastrar"}
                 />

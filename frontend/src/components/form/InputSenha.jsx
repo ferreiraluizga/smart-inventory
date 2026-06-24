@@ -14,14 +14,14 @@ function InputSenha({ margin, value, onChange}) {
             <div className="input-group mb-3">
                 <input
                     type={visibilidadeSenha ? "text" : "password"}
-                    className="form-control"
+                    className="form-control border-1 shadow-sm input-custom-focus"
                     value={value}
                     onChange={onChange}
                     required
                 />
                 <button
                     type="button"
-                    className="btn btn-outline-dark"
+                    className="btn btn-outline-warning"
                     onClick={alterarVisibilidadeSenha}
                 >
                     <i className={`bi ${visibilidadeSenha ? "bi-eye-slash" : "bi-eye"}`}></i>

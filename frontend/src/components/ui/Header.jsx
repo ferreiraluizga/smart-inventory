@@ -7,13 +7,13 @@ function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnCha
             </div>
 
             <div className="w-100">
-                <div className="input-group shadow-sm rounded-3">
-                    <span className="input-group-text bg-white border-end-0 text-muted">
+                <div className="input-group rounded-3">
+                    <span className="input-group-text bg-white border-1 shadow-sm border-end-0 text-muted shadow-sm">
                         <i className="bi bi-search"></i>
                     </span>
                     <input
                         type="text"
-                        className="form-control border-start-0 ps-0"
+                        className="form-control border-1 shadow-sm border-start-0 input-custom-focus"
                         placeholder={searchPlaceholder}
                         value={searchValue}
                         onChange={searchOnChange}
@@ -23,11 +23,11 @@ function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnCha
 
             <div>
                 <button
-                    className="btn btn-primary shadow-sm px-3 rounded-3 d-flex align-items-center gap-2 text-nowrap"
+                    className="btn btn-warning shadow-sm px-3 rounded-3 d-flex align-items-center gap-2 text-nowrap"
                     data-bs-toggle="modal"
                     data-bs-target={buttonTarget}
                 >
-                    <i className="bi bi-plus-lg fw-bold"></i>
+                    <i className="bi bi-plus-circle fw-bold"></i>
                     <span className="d-inline">{buttonText}</span>
                 </button>
             </div>

@@ -4,7 +4,7 @@ function Input({label, margin, type, value, onChange, minLength, maxLength, requ
             <label className="mb-1 form-label fw-medium">{label}</label>
             <input
                 type={type}
-                className="form-control border-1 shadow-sm"
+                className="form-control border-1 shadow-sm input-custom-focus"
                 value={value}
                 onChange={onChange}
                 minLength={minLength}

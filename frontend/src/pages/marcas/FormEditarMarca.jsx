@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { marcaService } from "../../services/marcaService";
+import Input from "../../components/form/Input";
+import ModalButton from "../../components/ui/ModalButton";
 
 function FormEditarMarca({ marca, onSalvar }) {
     const [nome, setNome] = useState(marca.nome);
@@ -24,39 +26,31 @@ function FormEditarMarca({ marca, onSalvar }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <label htmlFor={`nomeMarca-${marca.id}`} className="form-label fw-semibold text-secondary">
-                    Nome da Marca
-                </label>
-                <input
-                    type="text"
-                    className="form-control form-control-lg rounded-3 fs-6"
-                    id={`nomeMarca-${marca.id}`}
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Ex: Nike, Apple..."
-                    required
-                    disabled={carregando}
-                />
-            </div>
+            <Input
+                label="Nome"
+                margin="mb-3"
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+                disabled={carregando}
+                placeholder="Digite o nome da marca"
+            />
 
             <div className="d-flex justify-content-end gap-2 mt-4">
-                <button
+                <ModalButton 
                     type="button"
-                    className="btn btn-light rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="light"
                     disabled={carregando}
-                >
-                    Cancelar
-                </button>
-                <button
+                    buttonText="Cancelar"
+                />
+                
+                <ModalButton 
                     type="submit"
-                    className="btn btn-primary rounded-3 px-4"
-                    data-bs-dismiss="modal"
+                    color="warning"
                     disabled={carregando}
-                >
-                    {carregando ? "Salvando..." : "Salvar Alterações"}
-                </button>
+                    buttonText={carregando ? "Cadastrando..." : "Cadastrar"}
+                />
             </div>
         </form>
     );

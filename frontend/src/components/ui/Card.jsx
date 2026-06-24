@@ -1,14 +1,12 @@
 function Card({ icon, title, buttonEditarTarget, buttonExcluirTarget, children }) {
     return (
-        <div className="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white position-relative overflow-hidden transition-all-300">
+        <div className="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white position-relative overflow-hidden">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                {/* Ícone Principal com gradiente sutil ou fundo suave */}
-                <div className="bg-primary-subtle text-primary rounded-4 d-flex align-items-center justify-content-center"
+                <div className="bg-warning-subtle text-warning rounded-4 d-flex align-items-center justify-content-center"
                     style={{ width: "48px", height: "48px" }}>
                     <i className={`bi bi-${icon} fs-4`}></i>
                 </div>
 
-                {/* Botões de Ação Modernizados */}
                 <div className="d-flex gap-2 action-buttons">
                     <button 
                         className="btn btn-light text-secondary p-2 rounded-3 border-0 d-flex align-items-center justify-content-center"

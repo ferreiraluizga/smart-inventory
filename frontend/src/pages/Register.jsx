@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 import Input from "../components/form/Input";
 import InputSenha from "../components/form/InputSenha";
+import AuthBanner from "../components/auth/AuthBanner";
 
 function Register() {
 
@@ -45,20 +46,10 @@ function Register() {
     return (
         <div className="container-fluid vh-100">
             <div className="row h-100">
-                <div className="col-md-6 d-none d-md-flex bg-primary text-white justify-content-center align-items-center">
-                    <div className="text-center">
-                        <h1 className="display-4 fw-bold">
-                            Smart Inventory
-                        </h1>
-
-                        <p className="lead">
-                            Gerencie seu estoque de forma inteligente.
-                        </p>
-                    </div>
-                </div>
+                <AuthBanner />
 
                 <div className="col-md-6 d-flex justify-content-center align-items-center">
-                    <div className="card shadow border-0 p-4"
+                    <div className="card rounded-3 shadow border-0 p-4"
                         style={{ width: "100%", maxWidth: "450px" }}>
                         <div className="card-body">
                             <h2 className="text-center mb-4">Cadastrar</h2>

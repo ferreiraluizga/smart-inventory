@@ -65,7 +65,7 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
                 
                 <ModalButton 
                     type="submit"
-                    color="primary"
+                    color="warning"
                     disabled={carregando}
                     buttonText={carregando ? "Salvando..." : "Salvar alterações"}
                 />

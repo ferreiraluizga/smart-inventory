@@ -33,7 +33,7 @@ function Login() {
                 <AuthBanner />
                 
                 <div className="col-md-6 d-flex justify-content-center align-items-center">
-                    <div className="card shadow border-0 p-4"
+                    <div className="card shadow rounded-4 border-0 p-4"
                         style={{ width: "100%", maxWidth: "450px" }}>
                         <div className="card-body">
                             <h2 className="text-center mb-4">Entrar</h2>
@@ -56,7 +56,7 @@ function Login() {
                                     onChange={(e) => setSenha(e.target.value)}
                                 />
 
-                                <button type="submit" className="btn btn-primary w-100">Entrar</button>
+                                <button type="submit" className="btn btn-warning w-100 fw-medium">Entrar</button>
                             </form>
 
                             <div className="text-center mt-3">

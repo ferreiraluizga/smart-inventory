@@ -24,8 +24,8 @@ function Sidebar() {
 
             <div className="bg-dark shadow-lg rounded-4 d-flex flex-row align-items-center p-2"
                 style={{ minHeight: "65px" }}>
-                <div className="d-flex align-items-center text-white gap-2 px-2" style={{ minWidth: "48px" }}>
-                    <div className="bg-primary rounded-3 d-flex align-items-center justify-content-center fw-bold text-white shadow-sm"
+                <div className="d-flex align-items-center text-dark gap-2 px-2" style={{ minWidth: "48px" }}>
+                    <div className="bg-warning rounded-3 d-flex align-items-center justify-content-center fw-bold text-dark shadow-sm"
                         style={{ width: "36px", height: "36px", fontSize: "14px", letterSpacing: "0.5px" }}>
                         SI
                     </div>

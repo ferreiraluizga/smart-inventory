@@ -3,7 +3,7 @@ function TextArea({margin, label, value, onChange, placeholder, required = false
         <div className={margin}>
             <label className="mb-1 form-label fw-medium">{label}</label>
             <textarea
-                className="form-control border-1 shadow-sm"
+                className="form-control border-1 shadow-sm input-custom-focus"
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
