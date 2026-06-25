@@ -162,6 +162,13 @@ function Fornecedores() {
                 </div>
             )}
 
+            {fornecedoresFiltrados.length === 0 && (
+                <div className="text-center text-muted mt-5 py-5">
+                    <i className="bi bi-person-lines-fill fs-1"></i>
+                    <p className="mt-2">Nenhum fornecedor encontrado com esse nome.</p>
+                </div>
+            )}
+
             <Toast
                 visivel={toast.visivel}
                 mensagem={toast.mensagem}
