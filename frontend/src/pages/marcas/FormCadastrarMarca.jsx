@@ -23,7 +23,12 @@ function FormCadastrarMarca({ onCadastrar, onErro }) {
             console.error("Erro ao cadastrar marca:", error);
             
             if (onErro) {
-                onErro("Não foi possível cadastrar a marca. Tente novamente.");
+                const mensagemServidor = 
+                    error.response?.data?.message || // Padrão se você usa Axios
+                    error.message ||                 // Padrão do erro genérico
+                    "Não foi possível cadastrar a marca. Tente novamente.";
+                
+                onErro(mensagemServidor);
             }
         } finally {
             setCarregando(false);
@@ -49,6 +54,7 @@ function FormCadastrarMarca({ onCadastrar, onErro }) {
                     color="light"
                     disabled={carregando}
                     buttonText="Cancelar"
+                    fecharModal
                 />
                 
                 <ModalButton 

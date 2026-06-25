@@ -3,7 +3,7 @@ import { marcaService } from "../../services/marcaService";
 import Input from "../../components/form/Input";
 import ModalButton from "../../components/ui/ModalButton";
 
-function FormEditarMarca({ marca, onSalvar }) {
+function FormEditarMarca({ marca, onSalvar, onErro }) {
     const [nome, setNome] = useState(marca.nome);
     const [carregando, setCarregando] = useState(false);
 
@@ -18,7 +18,15 @@ function FormEditarMarca({ marca, onSalvar }) {
             }
         } catch (error) {
             console.error("Erro ao atualizar marca:", error);
-            alert("Não foi possível salvar as alterações.");
+            
+            if (onErro) {
+                const mensagemServidor = 
+                    error.response?.data?.message || // Padrão se você usa Axios
+                    error.message ||                 // Padrão do erro genérico
+                    "Não foi possível salvar as alterações. Tente novamente.";
+                
+                onErro(mensagemServidor);
+            }
         } finally {
             setCarregando(false);
         }
@@ -43,6 +51,7 @@ function FormEditarMarca({ marca, onSalvar }) {
                     color="light"
                     disabled={carregando}
                     buttonText="Cancelar"
+                    fecharModal
                 />
                 
                 <ModalButton 

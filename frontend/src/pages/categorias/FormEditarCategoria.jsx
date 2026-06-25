@@ -24,7 +24,12 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
             console.error("Erro ao atualizar categoria:", error);
             
             if (onErro) {
-                onErro("Não foi possível salvar as alterações da categoria.");
+                const mensagemServidor = 
+                    error.response?.data?.message || // Padrão se você usa Axios
+                    error.message ||                 // Padrão do erro genérico
+                    "Não foi possível salvar as alterações. Tente novamente.";
+                
+                onErro(mensagemServidor);
             }
         } finally {
             setCarregando(false);
@@ -61,6 +66,7 @@ function FormEditarCategoria({ categoria, onSalvar, onErro }) {
                     color="light"
                     disabled={carregando}
                     buttonText="Cancelar"
+                    fecharModal
                 />
                 
                 <ModalButton 

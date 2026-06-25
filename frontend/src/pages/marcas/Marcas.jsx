@@ -87,8 +87,8 @@ function Marcas() {
             />
 
             <Modal
-                id={"modalMarca"}
-                title={"Cadastrar marca"}
+                id="modalMarca"
+                title="Cadastrar marca"
             >
                 <FormCadastrarMarca onCadastrar={handleMarcaCriada} onErro={handleMarcaErro} />
             </Modal>
