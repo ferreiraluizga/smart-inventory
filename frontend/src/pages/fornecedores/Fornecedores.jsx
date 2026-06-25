@@ -125,7 +125,7 @@ function Fornecedores() {
                     {fornecedoresFiltrados.map((fornecedor) => (
                         <div className="col" key={fornecedor.id}>
                             <Card
-                                icon="tag"
+                                icon="person-lines-fill"
                                 title={fornecedor.nome}
                                 buttonEditarTarget={`#modalEditarFornecedor-${fornecedor.id}`}
                                 buttonExcluirTarget={`#modalExcluirFornecedor-${fornecedor.id}`}

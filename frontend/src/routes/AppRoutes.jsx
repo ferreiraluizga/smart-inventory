@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import Marcas from "../pages/marcas/Marcas";
 import Categorias from "../pages/categorias/Categorias";
 import Fornecedores from "../pages/fornecedores/Fornecedores";
+import Produtos from "../pages/produtos/Produtos";
 
 export default function AppRoutes() {
 
@@ -75,6 +76,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Fornecedores />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route 
+                path="/dashboard/produtos"
+                element={
+                    <PrivateRoute>
+                        <Produtos />
                     </PrivateRoute>
                 }
             />

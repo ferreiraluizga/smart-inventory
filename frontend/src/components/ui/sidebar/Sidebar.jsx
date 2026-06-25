@@ -24,6 +24,7 @@ function Sidebar() {
                     <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
                     <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
                     <SidebarItem url="/dashboard/fornecedores" title="Fornecedores" icon="person-lines-fill" />
+                    <SidebarItem url="/dashboard/produtos" title="Produtos" icon="box" />
                 </div>
             </div>
 
@@ -42,6 +43,7 @@ function Sidebar() {
                         <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
                         <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
                         <SidebarItem url="/dashboard/fornecedores" title="Fornecedores" icon="person-lines-fill" />
+                        <SidebarItem url="/dashboard/produtos" title="Produtos" icon="box" />
                     </div>
 
                     <button
