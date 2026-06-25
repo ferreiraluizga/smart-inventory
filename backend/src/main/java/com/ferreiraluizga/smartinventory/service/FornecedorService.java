@@ -36,14 +36,25 @@ public class FornecedorService {
 
     @Transactional
     public FornecedorResponse atualizar(FornecedorRequest dto, Long id) {
-        if (fornecedorRepository.existsByCnpj(dto.cnpj())) {
-            throw new RuntimeException("Já existe um fornecedor com o mesmo CNPJ");
-        }
+        // 1. Verifica se o fornecedor existe antes de tentar atualizar
+        Fornecedor fornecedorExistente = fornecedorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado com o ID: " + id));
 
-        if (fornecedorRepository.existsByEmail(dto.email())) {
-            throw new RuntimeException("Já existe um fornecedor com o mesmo email");
-        }
+        // 2. Valida se o CNPJ já está sendo usado por OUTRO fornecedor
+        fornecedorRepository.findByCnpj(dto.cnpj()).ifPresent(f -> {
+            if (!f.getId().equals(id)) {
+                throw new RuntimeException("Já existe um fornecedor com o mesmo CNPJ");
+            }
+        });
 
+        // 3. Valida se o e-mail já está sendo usado por OUTRO fornecedor
+        fornecedorRepository.findByEmail(dto.email()).ifPresent(f -> {
+            if (!f.getId().equals(id)) {
+                throw new RuntimeException("Já existe um fornecedor com o mesmo email");
+            }
+        });
+
+        // 4. Mapeia e salva as alterações
         Fornecedor f = fornecedorMapper.toEntity(dto);
         f.setId(id);
         return fornecedorMapper.toResponse(fornecedorRepository.save(f));
