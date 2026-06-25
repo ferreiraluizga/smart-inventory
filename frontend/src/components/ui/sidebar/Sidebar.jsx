@@ -23,6 +23,7 @@ function Sidebar() {
                 <div className="d-flex flex-wrap justify-content-around gap-3 conteudo-menu-mobile">
                     <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
                     <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
+                    <SidebarItem url="/dashboard/fornecedores" title="Fornecedores" icon="person-lines-fill" />
                 </div>
             </div>
 
@@ -40,6 +41,7 @@ function Sidebar() {
                     <div className="d-none d-md-flex flex-row align-items-center gap-2">
                         <SidebarItem url="/dashboard/marcas" title="Marcas" icon="tag" />
                         <SidebarItem url="/dashboard/categorias" title="Categorias" icon="collection" />
+                        <SidebarItem url="/dashboard/fornecedores" title="Fornecedores" icon="person-lines-fill" />
                     </div>
 
                     <button

@@ -8,6 +8,7 @@ import FormEditarCategoria from "./FormEditarCategoria";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
+import Spinner from "../../components/ui/Spinner"
 
 function Categorias() {
     const [categorias, setCategorias] = useState([]);
@@ -89,11 +90,7 @@ function Categorias() {
             </Modal>
 
             {loading ? (
-                <div className="d-flex justify-content-center align-items-center py-5">
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Carregando...</span>
-                    </div>
-                </div>
+                <Spinner />
             ) : (
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                     {categoriasFiltradas.map((categoria) => (
@@ -133,7 +130,7 @@ function Categorias() {
 
             {categoriasFiltradas.length === 0 && (
                 <div className="text-center text-muted mt-5 py-5">
-                    <i className="bi bi-tag fs-1"></i>
+                    <i className="bi bi-collection fs-1"></i>
                     <p className="mt-2">Nenhuma categoria encontrada com esse nome.</p>
                 </div>
             )}

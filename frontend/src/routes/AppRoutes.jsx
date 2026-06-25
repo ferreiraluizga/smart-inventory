@@ -9,6 +9,7 @@ import PublicRoute from "./PublicRoute";
 import Register from "../pages/Register";
 import Marcas from "../pages/marcas/Marcas";
 import Categorias from "../pages/categorias/Categorias";
+import Fornecedores from "../pages/fornecedores/Fornecedores";
 
 export default function AppRoutes() {
 
@@ -65,6 +66,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Categorias />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route 
+                path="/dashboard/fornecedores"
+                element={
+                    <PrivateRoute>
+                        <Fornecedores />
                     </PrivateRoute>
                 }
             />

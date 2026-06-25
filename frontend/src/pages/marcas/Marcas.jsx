@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { marcaService } from "../../services/marcaService";
-import Sidebar from "../../components/ui/sidebar/Sidebar";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Modal from "../../components/ui/Modal";
 import Header from "../../components/ui/Header";
@@ -10,6 +9,7 @@ import Toast from "../../components/ui/Toast";
 import FormEditarMarca from "./FormEditarMarca";
 import FormCadastrarMarca from "./FormCadastrarMarca";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
+import Spinner from "../../components/ui/Spinner"
 
 function Marcas() {
     const [marcas, setMarcas] = useState([]);
@@ -94,11 +94,7 @@ function Marcas() {
             </Modal>
 
             {loading ? (
-                <div className="d-flex justify-content-center align-items-center py-5">
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Carregando...</span>
-                    </div>
-                </div>
+                <Spinner />
             ) : (
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                     {marcasFiltradas.map((marca) => (

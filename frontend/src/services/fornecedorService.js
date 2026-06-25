@@ -1,6 +1,6 @@
 import { api } from "../api/api"
 
-const fornecedorService = {
+export const fornecedorService = {
 
     async salvar(nome, cnpj, email) {
         const response = await api.post(
@@ -29,15 +29,27 @@ const fornecedorService = {
     },
 
     async excluir(id) {
+        const response = await api.delete(
+            `/fornecedores/${id}`
+        );
 
+        return response.data;
     },
 
     async listarTodos() {
+        const response = await api.get(
+            `/fornecedores`
+        );
 
+        return response.data;
     },
 
     async buscarPorId(id) {
+        const response = await api.get(
+            `/fornecedores/${id}`
+        );
 
+        return response.data;
     }
 
 }
