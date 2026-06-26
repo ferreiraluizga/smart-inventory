@@ -110,7 +110,6 @@ function Produtos() {
                 <Spinner />
             ) : (
                 <>
-                    {/* CORREÇÃO 3: Colocado dentro do bloco que já terminou o loading */}
                     {produtosFiltrados.length === 0 ? (
                         <div className="text-center text-muted mt-5 py-5">
                             <i className="bi bi-box fs-1"></i>

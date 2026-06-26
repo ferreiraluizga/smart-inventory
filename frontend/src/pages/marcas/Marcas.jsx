@@ -96,45 +96,47 @@ function Marcas() {
             {loading ? (
                 <Spinner />
             ) : (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                    {marcasFiltradas.map((marca) => (
-                        <div className="col" key={marca.id}>
-                            <Card
-                                icon="tag"
-                                title={marca.nome}
-                                buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
-                                buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
-                            />
-
-                            <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
-                                <FormEditarMarca
-                                    marca={marca}
-                                    onSalvar={handleMarcaAtualizada}
-                                    onErro={handleMarcaErro}
-                                />
-                            </Modal>
-
-                            <ModalConfirmacao 
-                                id={`modalExcluirMarca-${marca.id}`}
-                                titulo="Você tem certeza"
-                                descricao={
-                                    <span>
-                                        Você excluirá a marca <strong className="text-dark">{marca.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
-                                    </span>
-                                }
-                                onConfirmar={() => handleMarcaExcluida(marca.id)}
-                                tipo="danger"
-                            />
+                <>
+                    {marcasFiltradas.length === 0 ? (
+                        <div className="text-center text-muted mt-5 py-5">
+                            <i className="bi bi-tag fs-1"></i>
+                            <p className="mt-2">Nenhuma marca encontrada com esse nome.</p>
                         </div>
-                    ))}
-                </div>
-            )}
+                    ) : (
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                            {marcasFiltradas.map((marca) => (
+                                <div className="col" key={marca.id}>
+                                    <Card
+                                        icon="tag"
+                                        title={marca.nome}
+                                        buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
+                                        buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
+                                    />
 
-            {marcasFiltradas.length === 0 && (
-                <div className="text-center text-muted mt-5 py-5">
-                    <i className="bi bi-tag fs-1"></i>
-                    <p className="mt-2">Nenhuma marca encontrada com esse nome.</p>
-                </div>
+                                    <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
+                                        <FormEditarMarca
+                                            marca={marca}
+                                            onSalvar={handleMarcaAtualizada}
+                                            onErro={handleMarcaErro}
+                                        />
+                                    </Modal>
+
+                                    <ModalConfirmacao
+                                        id={`modalExcluirMarca-${marca.id}`}
+                                        titulo="Você tem certeza"
+                                        descricao={
+                                            <span>
+                                                Você excluirá a marca <strong className="text-dark">{marca.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
+                                            </span>
+                                        }
+                                        onConfirmar={() => handleMarcaExcluida(marca.id)}
+                                        tipo="danger"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
 
             <Toast

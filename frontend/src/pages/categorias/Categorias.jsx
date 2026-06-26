@@ -92,47 +92,49 @@ function Categorias() {
             {loading ? (
                 <Spinner />
             ) : (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                    {categoriasFiltradas.map((categoria) => (
-                        <div className="col" key={categoria.id}>
-                            <Card
-                                icon="bookmark-dash"
-                                title={categoria.nome}
-                                buttonEditarTarget={`#modalEditarCategoria-${categoria.id}`}
-                                buttonExcluirTarget={`#modalExcluirCategoria-${categoria.id}`}
-                            >
-                                <p>{categoria.descricao}</p>
-                            </Card>
-
-                            <Modal id={`modalEditarCategoria-${categoria.id}`} title="Editar categoria">
-                                <FormEditarCategoria
-                                    categoria={categoria}
-                                    onSalvar={handleCategoriaAtualizada}
-                                    onErro={handleCategoriaErro}
-                                />
-                            </Modal>
-
-                            <ModalConfirmacao
-                                id={`modalExcluirCategoria-${categoria.id}`}
-                                titulo="Você tem certeza"
-                                descricao={
-                                    <span>
-                                        Você excluirá a categoria <strong className="text-dark">{categoria.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
-                                    </span>
-                                }
-                                onConfirmar={() => handleCategoriaExcluida(categoria.id)}
-                                tipo="danger"
-                            />
+                <>
+                    {categoriasFiltradas.length === 0 ? (
+                        <div className="text-center text-muted mt-5 py-5">
+                            <i className="bi bi-collection fs-1"></i>
+                            <p className="mt-2">Nenhuma categoria encontrada com esse nome.</p>
                         </div>
-                    ))}
-                </div>
-            )}
+                    ) : (
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                            {categoriasFiltradas.map((categoria) => (
+                                <div className="col" key={categoria.id}>
+                                    <Card
+                                        icon="bookmark-dash"
+                                        title={categoria.nome}
+                                        buttonEditarTarget={`#modalEditarCategoria-${categoria.id}`}
+                                        buttonExcluirTarget={`#modalExcluirCategoria-${categoria.id}`}
+                                    >
+                                        <p>{categoria.descricao}</p>
+                                    </Card>
 
-            {categoriasFiltradas.length === 0 && (
-                <div className="text-center text-muted mt-5 py-5">
-                    <i className="bi bi-collection fs-1"></i>
-                    <p className="mt-2">Nenhuma categoria encontrada com esse nome.</p>
-                </div>
+                                    <Modal id={`modalEditarCategoria-${categoria.id}`} title="Editar categoria">
+                                        <FormEditarCategoria
+                                            categoria={categoria}
+                                            onSalvar={handleCategoriaAtualizada}
+                                            onErro={handleCategoriaErro}
+                                        />
+                                    </Modal>
+
+                                    <ModalConfirmacao
+                                        id={`modalExcluirCategoria-${categoria.id}`}
+                                        titulo="Você tem certeza"
+                                        descricao={
+                                            <span>
+                                                Você excluirá a categoria <strong className="text-dark">{categoria.nome}</strong> e todos os dados associados a ela. Essa ação é irreversível.
+                                            </span>
+                                        }
+                                        onConfirmar={() => handleCategoriaExcluida(categoria.id)}
+                                        tipo="danger"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
 
             <Toast

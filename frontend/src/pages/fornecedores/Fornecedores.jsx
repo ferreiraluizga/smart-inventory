@@ -121,52 +121,54 @@ function Fornecedores() {
             {loading ? (
                 <Spinner />
             ) : (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                    {fornecedoresFiltrados.map((fornecedor) => (
-                        <div className="col" key={fornecedor.id}>
-                            <Card
-                                icon="person-lines-fill"
-                                title={fornecedor.nome}
-                                buttonEditarTarget={`#modalEditarFornecedor-${fornecedor.id}`}
-                                buttonExcluirTarget={`#modalExcluirFornecedor-${fornecedor.id}`}
-                            >
-                                <p className="mb-1 text-muted">
-                                    <strong>CNPJ:</strong> {formatarCNPJExibicao(fornecedor.cnpj)}
-                                </p>
-                                <p className="mb-0 text-muted">
-                                    <strong>E-mail:</strong> {fornecedor.email}
-                                </p>
-                            </Card>
-
-                            <Modal id={`modalEditarFornecedor-${fornecedor.id}`} title="Editar fornecedor">
-                                <FormEditarFornecedor
-                                    fornecedor={fornecedor}
-                                    onSalvar={handleFornecedorAtualizado}
-                                    onErro={handleFornecedorErro}
-                                />
-                            </Modal>
-
-                            <ModalConfirmacao
-                                id={`modalExcluirFornecedor-${fornecedor.id}`}
-                                titulo="Você tem certeza"
-                                descricao={
-                                    <span>
-                                        Você excluirá o fornecedor <strong className="text-dark">{fornecedor.nome}</strong> e todos os dados associados a ele. Essa ação é irreversível.
-                                    </span>
-                                }
-                                onConfirmar={() => handleFornecedorExcluido(fornecedor.id)}
-                                tipo="danger"
-                            />
+                <>
+                    {fornecedoresFiltrados.length === 0 ? (
+                        <div className="text-center text-muted mt-5 py-5">
+                            <i className="bi bi-person-lines-fill fs-1"></i>
+                            <p className="mt-2">Nenhum fornecedor encontrado com esse nome.</p>
                         </div>
-                    ))}
-                </div>
-            )}
+                    ) : (
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                            {fornecedoresFiltrados.map((fornecedor) => (
+                                <div className="col" key={fornecedor.id}>
+                                    <Card
+                                        icon="person-lines-fill"
+                                        title={fornecedor.nome}
+                                        buttonEditarTarget={`#modalEditarFornecedor-${fornecedor.id}`}
+                                        buttonExcluirTarget={`#modalExcluirFornecedor-${fornecedor.id}`}
+                                    >
+                                        <p className="mb-1 text-muted">
+                                            <strong>CNPJ:</strong> {formatarCNPJExibicao(fornecedor.cnpj)}
+                                        </p>
+                                        <p className="mb-0 text-muted">
+                                            <strong>E-mail:</strong> {fornecedor.email}
+                                        </p>
+                                    </Card>
 
-            {fornecedoresFiltrados.length === 0 && (
-                <div className="text-center text-muted mt-5 py-5">
-                    <i className="bi bi-person-lines-fill fs-1"></i>
-                    <p className="mt-2">Nenhum fornecedor encontrado com esse nome.</p>
-                </div>
+                                    <Modal id={`modalEditarFornecedor-${fornecedor.id}`} title="Editar fornecedor">
+                                        <FormEditarFornecedor
+                                            fornecedor={fornecedor}
+                                            onSalvar={handleFornecedorAtualizado}
+                                            onErro={handleFornecedorErro}
+                                        />
+                                    </Modal>
+
+                                    <ModalConfirmacao
+                                        id={`modalExcluirFornecedor-${fornecedor.id}`}
+                                        titulo="Você tem certeza"
+                                        descricao={
+                                            <span>
+                                                Você excluirá o fornecedor <strong className="text-dark">{fornecedor.nome}</strong> e todos os dados associados a ele. Essa ação é irreversível.
+                                            </span>
+                                        }
+                                        onConfirmar={() => handleFornecedorExcluido(fornecedor.id)}
+                                        tipo="danger"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
 
             <Toast
