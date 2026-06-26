@@ -1,4 +1,14 @@
-function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnChange, buttonTarget, buttonText }) {
+import { useNavigate } from "react-router-dom";
+
+function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnChange, buttonTarget, buttonText, buttonLink }) {
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        if (buttonLink) {
+            navigate(buttonLink);
+        }
+    }
+
     return (
         <div className="card shadow-sm border-0 p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-5">
             <div>
@@ -24,8 +34,9 @@ function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnCha
             <div>
                 <button
                     className="btn btn-warning shadow-sm px-3 rounded-3 d-flex align-items-center gap-2 text-nowrap"
-                    data-bs-toggle="modal"
-                    data-bs-target={buttonTarget}
+                    data-bs-toggle={buttonTarget ? "modal" : undefined}
+                    data-bs-target={buttonTarget ? buttonTarget : undefined}
+                    onClick={handleButtonClick}
                 >
                     <i className="bi bi-plus-circle fw-bold"></i>
                     <span className="d-inline">{buttonText}</span>

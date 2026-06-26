@@ -11,6 +11,7 @@ import Marcas from "../pages/marcas/Marcas";
 import Categorias from "../pages/categorias/Categorias";
 import Fornecedores from "../pages/fornecedores/Fornecedores";
 import Produtos from "../pages/produtos/Produtos";
+import Pedidos from "../pages/pedidos/Pedidos";
 
 export default function AppRoutes() {
 
@@ -85,6 +86,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Produtos />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route 
+                path="/dashboard/pedidos"
+                element={
+                    <PrivateRoute>
+                        <Pedidos />
                     </PrivateRoute>
                 }
             />

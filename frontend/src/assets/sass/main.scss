@@ -49,3 +49,17 @@ body {
     border-color: #ffc107 !important;
     outline: 0 !important;
 }
+
+.popover {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.popover-body {
+    padding: 0 !important;
+}
+
+.popover .popover-arrow {
+    display: none !important;
+}
