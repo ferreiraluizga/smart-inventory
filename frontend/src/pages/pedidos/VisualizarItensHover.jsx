@@ -10,7 +10,6 @@ function VisualizarItensHover({ pedido }) {
         ? pedido.total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) 
         : "R$ 0,00";
 
-    // Adicionado style="margin: 0 !important;" no card principal para matar qualquer quebra do Bootstrap
     const cardHtml = `
         <div class="card border-0 shadow-lg rounded-3 overflow-hidden" style="width: 320px; margin: 0 !important;">
             <div class="card-header bg-dark text-white p-3 border-0">
@@ -70,7 +69,7 @@ function VisualizarItensHover({ pedido }) {
             trigger: "hover focus",
             placement: "top",
             sanitize: false,
-            container: "body", // CORREÇÃO: Força o popover a renderizar fora da célula da tabela eliminando a borda fantasma
+            container: "body",
         });
 
         return () => {

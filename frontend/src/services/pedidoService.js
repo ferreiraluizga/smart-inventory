@@ -16,12 +16,9 @@ export const pedidoService = {
         return response.data;
     },
 
-    async registrarPagamento(id, dataPagamento) {
+    async registrarPagamento(id) {
         const response = await api.put(
-            `/pedidos/${id}/registrar-pagamento`,
-            {
-                dataPagamento
-            }
+            `/pedidos/${id}/registrar-pagamento`
         );
 
         return response.data;

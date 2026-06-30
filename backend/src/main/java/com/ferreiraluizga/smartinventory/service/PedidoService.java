@@ -83,11 +83,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public PedidoResponse registrarPagamento(Long id, Date dataPagamento) {
-        if (dataPagamento == null) {
-            throw new RuntimeException("A data de pagamento é obrigatória para efetivar esta alteração.");
-        }
-
+    public PedidoResponse registrarPagamento(Long id) {
         Pedido p = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
@@ -96,7 +92,7 @@ public class PedidoService {
         }
 
         p.setStatus(StatusPagamento.PAGO);
-        p.setDataPagamento(dataPagamento);
+        p.setDataPagamento(new Date());
 
         for (ItemPedido item : p.getItens()) {
             Produto produto = item.getProduto();

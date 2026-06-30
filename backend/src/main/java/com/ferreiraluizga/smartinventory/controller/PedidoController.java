@@ -26,8 +26,8 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}/registrar-pagamento")
-    public ResponseEntity<PedidoResponse> registrarPagamento(@PathVariable Long id, @RequestBody Date dataPagamento) {
-        PedidoResponse response = pedidoService.registrarPagamento(id, dataPagamento);
+    public ResponseEntity<PedidoResponse> registrarPagamento(@PathVariable Long id) {
+        PedidoResponse response = pedidoService.registrarPagamento(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
