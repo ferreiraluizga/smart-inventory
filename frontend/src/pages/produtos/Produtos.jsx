@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Header from "../../components/ui/Header";
-import { produtoService } from "../../services/produtoService"
+import {produtoService} from "../../services/produtoService"
 import Modal from "../../components/ui/Modal";
 import FormCadastrarProduto from "./FormCadastrarProduto";
 import Toast from "../../components/ui/Toast";
@@ -14,14 +14,14 @@ function Produtos() {
     const [produtos, setProdutos] = useState([]);
     const [busca, setBusca] = useState("");
 
-    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
+    const [toast, setToast] = useState({visivel: false, mensagem: "", tipo: "danger"});
 
     const [loading, setLoading] = useState(true);
 
     const mostrarToast = (mensagem, tipo = "danger") => {
-        setToast({ visivel: true, mensagem, tipo });
+        setToast({visivel: true, mensagem, tipo});
         setTimeout(() => {
-            setToast({ visivel: false, mensagem: "", tipo: "danger" });
+            setToast({visivel: false, mensagem: "", tipo: "danger"});
         }, 4000);
     };
 
@@ -42,7 +42,7 @@ function Produtos() {
         }
     }
 
-    const produtosFiltrados = produtos.filter( p => 
+    const produtosFiltrados = produtos.filter(p =>
         p.nome.toLowerCase().includes(busca.toLowerCase())
     );
 
@@ -60,7 +60,7 @@ function Produtos() {
     }
 
     const handleProdutoAtualizado = (produtoEditado) => {
-        setProdutos((produtosAnteriores) => 
+        setProdutos((produtosAnteriores) =>
             produtosAnteriores.map((p) => (p.id === produtoEditado.id ? produtoEditado : p))
         );
         mostrarToast("Produto atualizado com sucesso!", "success");
@@ -103,11 +103,11 @@ function Produtos() {
                 id="modalProduto"
                 title="Cadastrar produto"
             >
-                <FormCadastrarProduto onCadastrar={handleProdutoCriado} onErro={handleProdutoErro} />
+                <FormCadastrarProduto onCadastrar={handleProdutoCriado} onErro={handleProdutoErro}/>
             </Modal>
 
             {loading ? (
-                <Spinner />
+                <Spinner/>
             ) : (
                 <>
                     {produtosFiltrados.length === 0 ? (
@@ -124,7 +124,33 @@ function Produtos() {
                                         title={produto.nome}
                                         buttonEditarTarget={`#modalEditarProduto-${produto.id}`}
                                         buttonExcluirTarget={`#modalExcluirProduto-${produto.id}`}
-                                    />
+                                    >
+                                        {/* Informações adicionais injetadas via children */}
+                                        <p className="mb-1 text-muted text-truncate" title={produto.descricao}>
+                                            {produto.descricao || "Nenhuma descrição fornecida."}
+                                        </p>
+                                        <div
+                                            className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-light">
+                                            <div>
+                                                <span className="d-block small text-muted">Preço</span>
+                                                <strong className="text-dark fs-5">
+                                                    {new Intl.NumberFormat('pt-BR', {
+                                                        style: 'currency',
+                                                        currency: 'BRL'
+                                                    }).format(produto.preco)}
+                                                </strong>
+                                            </div>
+                                            <span
+                                                className={`badge ${produto.quantidade <= 5 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success'}`}
+                                            >
+                                                Qtd: {produto.quantidade}
+                                                </span>
+                                        </div>
+                                        <div className="mt-2 d-flex justify-content-between small text-muted">
+                                            <span>{produto.marcaNome || 'Sem Marca'}</span>
+                                            <span>{produto.categoriaNome}</span>
+                                        </div>
+                                    </Card>
 
                                     <Modal id={`modalEditarProduto-${produto.id}`} title="Editar produto">
                                         <FormEditarProduto
@@ -134,12 +160,13 @@ function Produtos() {
                                         />
                                     </Modal>
 
-                                    <ModalConfirmacao 
+                                    <ModalConfirmacao
                                         id={`modalExcluirProduto-${produto.id}`}
                                         titulo="Você tem certeza"
                                         descricao={
                                             <span>
-                                                Você excluirá o produto <strong className="text-dark">{produto.nome}</strong> e todos os dados associados a ele. Essa ação é irreversível.
+                                                Você excluirá o produto <strong
+                                                className="text-dark">{produto.nome}</strong> e todos os dados associados a ele. Essa ação é irreversível.
                                             </span>
                                         }
                                         onConfirmar={() => handleProdutoExcluido(produto.id)}
@@ -156,7 +183,7 @@ function Produtos() {
                 visivel={toast.visivel}
                 mensagem={toast.mensagem}
                 tipo={toast.tipo}
-                onClose={() => setToast({ ...toast, visivel: false })}
+                onClose={() => setToast({...toast, visivel: false})}
             />
         </DashboardLayout>
     );
