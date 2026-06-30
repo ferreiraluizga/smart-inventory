@@ -2,7 +2,7 @@ import { api } from "../api/api"
 
 export const pedidoService = {
 
-    async salvar(fornecedorId, dataVencimento, dataPagamento) {
+    async salvar(fornecedorId, dataVencimento, dataPagamento, itens) {
         const response = await api.post(
             "/pedidos",
             {

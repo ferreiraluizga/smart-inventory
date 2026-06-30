@@ -6,8 +6,11 @@ import Toast from "../../components/ui/Toast";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Spinner from "../../components/ui/Spinner";
 import VisualizarItensHover from "./VisualizarItensHover";
+import {useLocation} from "react-router-dom";
 
 function Pedidos() {
+    const location = useLocation();
+
     const [pedidos, setPedidos] = useState([]);
     const [busca, setBusca] = useState("");
 
@@ -23,8 +26,42 @@ function Pedidos() {
     };
 
     useEffect(() => {
-        carregarPedidos();
-    }, []);
+        const inicializarPagina = async () => {
+            try {
+                setLoading(true);
+
+                // 1. Busca todos os pedidos do banco de dados
+                const dados = await pedidoService.listarTodos();
+                let listaAtualizada = dados || [];
+
+                // 2. Se veio um pedido novo do Checkout, junta na lista e mostra o Toast
+                if (location.state?.novoPedido) {
+                    const novo = location.state.novoPedido;
+
+                    // Evita duplicar na lista caso a API já tenha trazido o registro
+                    if (!listaAtualizada.some(p => p.id === novo.id)) {
+                        listaAtualizada = [novo, ...listaAtualizada];
+                    }
+
+                    mostrarToast("Pedido cadastrado com sucesso!", "success");
+
+                    // Limpa o estado da rota para o Toast não repetir se o usuário der F5
+                    window.history.replaceState({}, document.title);
+                }
+
+                // 3. Alimenta o estado uma única vez com a lista final montada
+                setPedidos(listaAtualizada);
+
+            } catch (error) {
+                console.error("Erro ao inicializar a página de pedidos: ", error);
+                mostrarToast("Erro ao carregar a lista de pedidos do servidor.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        inicializarPagina();
+    }, [location]);
 
     const carregarPedidos = async () => {
         try {
@@ -50,9 +87,10 @@ function Pedidos() {
         try {
             await pedidoService.registrarPagamento(id);
 
+            // CORREÇÃO: Altera a propriedade 'status' para 'PAGO' para sincronizar com as badges da tabela
             setPedidos((pedidosAnteriores) =>
                 pedidosAnteriores.map((p) =>
-                    p.id === id ? { ...p, pago: true } : p
+                    p.id === id ? { ...p, status: "PAGO" } : p
                 )
             );
             mostrarToast("Pagamento registrado com sucesso!", "success");

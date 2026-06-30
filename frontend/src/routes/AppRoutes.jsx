@@ -1,4 +1,4 @@
-import { Link, Routes, Route } from "react-router-dom";
+import {Link, Routes, Route} from "react-router-dom";
 
 import Welcome from "../pages/Welcome";
 import Login from "../pages/Login";
@@ -12,6 +12,7 @@ import Categorias from "../pages/categorias/Categorias";
 import Fornecedores from "../pages/fornecedores/Fornecedores";
 import Produtos from "../pages/produtos/Produtos";
 import Pedidos from "../pages/pedidos/Pedidos";
+import Checkout from "../pages/pedidos/Checkout.jsx";
 
 export default function AppRoutes() {
 
@@ -22,7 +23,7 @@ export default function AppRoutes() {
                 path="/"
                 element={
                     <PublicRoute>
-                        <Welcome />
+                        <Welcome/>
                     </PublicRoute>
                 }
             />
@@ -31,7 +32,7 @@ export default function AppRoutes() {
                 path="/login"
                 element={
                     <PublicRoute>
-                        <Login />
+                        <Login/>
                     </PublicRoute>
                 }
             />
@@ -40,7 +41,7 @@ export default function AppRoutes() {
                 path="/register"
                 element={
                     <PublicRoute>
-                        <Register />
+                        <Register/>
                     </PublicRoute>
                 }
             />
@@ -49,52 +50,61 @@ export default function AppRoutes() {
                 path="/dashboard"
                 element={
                     <PrivateRoute>
-                        <Dashboard />
+                        <Dashboard/>
                     </PrivateRoute>
                 }
             />
 
-            <Route 
+            <Route
                 path="/dashboard/marcas"
                 element={
                     <PrivateRoute>
-                        <Marcas />
+                        <Marcas/>
                     </PrivateRoute>
                 }
             />
 
-            <Route 
+            <Route
                 path="/dashboard/categorias"
                 element={
                     <PrivateRoute>
-                        <Categorias />
+                        <Categorias/>
                     </PrivateRoute>
                 }
             />
 
-            <Route 
+            <Route
                 path="/dashboard/fornecedores"
                 element={
                     <PrivateRoute>
-                        <Fornecedores />
+                        <Fornecedores/>
                     </PrivateRoute>
                 }
             />
 
-            <Route 
+            <Route
                 path="/dashboard/produtos"
                 element={
                     <PrivateRoute>
-                        <Produtos />
+                        <Produtos/>
                     </PrivateRoute>
                 }
             />
 
-            <Route 
+            <Route
                 path="/dashboard/pedidos"
                 element={
                     <PrivateRoute>
-                        <Pedidos />
+                        <Pedidos/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/pedidos/checkout"
+                element={
+                    <PrivateRoute>
+                        <Checkout/>
                     </PrivateRoute>
                 }
             />
