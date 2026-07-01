@@ -177,7 +177,7 @@ function Vendas() {
                                                     titulo="Estornar/Excluir Venda?"
                                                     descricao={
                                                         <span>
-                                        Você excluirá permanentemente o registro da venda <strong className="text-dark">#{venda.id}</strong> no valor de <strong className="text-dark">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(venda.valorTotal || 0)}</strong>. Esta ação não poderá ser desfeita.
+                                        Você excluirá permanentemente o registro da venda <strong className="text-dark">#{venda.id}</strong> no valor de <strong className="text-dark">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(venda.total || 0)}</strong>. Esta ação não poderá ser desfeita.
                                     </span>
                                                     }
                                                     onConfirmar={() => handleVendaExcluida(venda.id)}

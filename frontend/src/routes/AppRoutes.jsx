@@ -14,6 +14,7 @@ import Produtos from "../pages/produtos/Produtos";
 import Pedidos from "../pages/pedidos/Pedidos";
 import CheckoutPedido from "../pages/pedidos/CheckoutPedido.jsx";
 import Vendas from "../pages/vendas/Vendas.jsx";
+import CheckoutVenda from "../pages/vendas/CheckoutVenda.jsx";
 
 export default function AppRoutes() {
 
@@ -115,6 +116,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Vendas />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/vendas/checkout"
+                element={
+                    <PrivateRoute>
+                        <CheckoutVenda />
                     </PrivateRoute>
                 }
             />
