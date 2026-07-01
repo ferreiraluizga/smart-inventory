@@ -44,4 +44,10 @@ public class MarcaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MarcaResponse> buscarPorId(@PathVariable Long id) {
+        MarcaResponse response =  marcaService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

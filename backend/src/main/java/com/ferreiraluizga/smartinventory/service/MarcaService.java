@@ -49,4 +49,11 @@ public class MarcaService {
                 .map(marcaMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public MarcaResponse buscarPorId(Long id) {
+        Marca m = marcaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Marca não encontrada"));
+        return marcaMapper.toResponse(m);
+    }
 }
