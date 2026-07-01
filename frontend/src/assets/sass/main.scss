@@ -63,3 +63,8 @@ body {
 .popover .popover-arrow {
     display: none !important;
 }
+
+.custom-card-hover:hover {
+    transform: translateY(-5px); /* Eleva o card levemente */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12) !important; /* Deixa a sombra mais suave e profunda */
+}

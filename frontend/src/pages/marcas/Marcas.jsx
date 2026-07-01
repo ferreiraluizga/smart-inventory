@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { marcaService } from "../../services/marcaService";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Modal from "../../components/ui/Modal";
@@ -10,10 +9,13 @@ import FormEditarMarca from "./FormEditarMarca";
 import FormCadastrarMarca from "./FormCadastrarMarca";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Spinner from "../../components/ui/Spinner"
+import {useNavigate} from "react-router-dom";
 
 function Marcas() {
     const [marcas, setMarcas] = useState([]);
     const [busca, setBusca] = useState("");
+
+    const navigate = useNavigate();
 
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
@@ -103,7 +105,7 @@ function Marcas() {
                             <p className="mt-2">Nenhuma marca encontrada com esse nome.</p>
                         </div>
                     ) : (
-                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-xl-6 g-2">
                             {marcasFiltradas.map((marca) => (
                                 <div className="col" key={marca.id}>
                                     <Card
@@ -111,6 +113,7 @@ function Marcas() {
                                         title={marca.nome}
                                         buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
                                         buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
+                                        onClick={() => navigate(`/dashboard/marcas/${marca.id}`)}
                                     />
 
                                     <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
