@@ -5,7 +5,7 @@ import Header from "../../components/ui/Header";
 import Toast from "../../components/ui/Toast";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Spinner from "../../components/ui/Spinner";
-import VisualizarItensHover from "./VisualizarItensHover";
+import VisualizarItensPedidoHover from "./VisualizarItensPedidoHover.jsx";
 import {useLocation} from "react-router-dom";
 
 function Pedidos() {
@@ -34,7 +34,7 @@ function Pedidos() {
                 const dados = await pedidoService.listarTodos();
                 let listaAtualizada = dados || [];
 
-                // 2. Se veio um pedido novo do Checkout, junta na lista e mostra o Toast
+                // 2. Se veio um pedido novo do CheckoutPedido, junta na lista e mostra o Toast
                 if (location.state?.novoPedido) {
                     const novo = location.state.novoPedido;
 
@@ -90,7 +90,13 @@ function Pedidos() {
             // CORREÇÃO: Altera a propriedade 'status' para 'PAGO' para sincronizar com as badges da tabela
             setPedidos((pedidosAnteriores) =>
                 pedidosAnteriores.map((p) =>
-                    p.id === id ? { ...p, status: "PAGO" } : p
+                    p.id === id
+                        ? {
+                            ...p,
+                            status: "PAGO",
+                            dataPagamento: new Date().toISOString() // Adiciona a data atual no formato ISO
+                        }
+                        : p
                 )
             );
             mostrarToast("Pagamento registrado com sucesso!", "success");
@@ -119,7 +125,7 @@ function Pedidos() {
                 searchPlaceholder="Buscar por fornecedor ou ID..."
                 searchValue={busca}
                 searchOnChange={(e) => setBusca(e.target.value)}
-                buttonLink="/dashboard/pedidos/checkout" // Corrigido para ir direto para o PDV de Checkout
+                buttonLink="/dashboard/pedidos/checkout" // Corrigido para ir direto para o PDV de CheckoutPedido
                 buttonText="Realizar Pedido"
             />
 
@@ -137,95 +143,102 @@ function Pedidos() {
                             <div className="table-responsive">
                                 <table className="table align-middle table-hover m-0">
                                     <thead className="table-light text-secondary">
-                                        <tr>
-                                            <th className="ps-4" style={{ width: "80px" }}>ID</th>
-                                            <th>Fornecedor</th>
-                                            <th>Vencimento</th>
-                                            {/* INCLUSÃO 1: Coluna de status no cabeçalho */}
-                                            <th className="text-center" style={{ width: "130px" }}>Status</th>
-                                            <th className="text-center">Qtd. Itens</th>
-                                            {/* AJUSTE: Aumentado o estilo de largura para acomodar o novo botão */}
-                                            <th className="text-end pe-4" style={{ width: "160px" }}>Ações</th>
-                                        </tr>
+                                    <tr>
+                                        <th className="ps-4" style={{ width: "80px" }}>ID</th>
+                                        <th>Fornecedor</th>
+                                        <th>Vencimento</th>
+                                        {/* INCLUSÃO: Nova coluna de Data de Pagamento no cabeçalho */}
+                                        <th>Pagamento</th>
+                                        <th className="text-center" style={{ width: "130px" }}>Status</th>
+                                        <th className="text-center">Qtd. Itens</th>
+                                        {/* AJUSTE: Ajustado ligeiramente para comportar o layout com a nova coluna */}
+                                        <th className="text-end pe-4" style={{ width: "150px" }}>Ações</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        {pedidosFiltrados.map((pedido) => (
-                                            <tr key={pedido.id}>
-                                                <td className="ps-4 fw-bold text-secondary">#{pedido.id}</td>
-                                                <td>
-                                                    <span className="fw-semibold text-dark">
-                                                        {pedido.fornecedorNome || "Fornecedor não identificado"}
+                                    {pedidosFiltrados.map((pedido) => (
+                                        <tr key={pedido.id}>
+                                            <td className="ps-4 fw-bold text-secondary">#{pedido.id}</td>
+                                            <td>
+                                                <span className="fw-semibold text-dark">
+                                                    {pedido.fornecedorNome || "Fornecedor não identificado"}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {pedido.dataVencimento
+                                                    ? new Date(pedido.dataVencimento).toLocaleDateString('pt-BR')
+                                                    : "Não informada"
+                                                }
+                                            </td>
+                                            {/* INCLUSÃO: Exibição da Data de Pagamento condicional */}
+                                            <td>
+                                                {pedido.status === "PAGO" && pedido.dataPagamento
+                                                    ? new Date(pedido.dataPagamento).toLocaleDateString('pt-BR')
+                                                    : <span className="text-muted">Não realizado</span>
+                                                }
+                                            </td>
+                                            <td className="text-center">
+                                                {pedido.status === "PAGO" ? (
+                                                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-2">
+                                                        <i className="bi bi-check-circle-fill me-1"></i> Pago
                                                     </span>
-                                                </td>
-                                                <td>
-                                                    {pedido.dataVencimento
-                                                        ? new Date(pedido.dataVencimento).toLocaleDateString('pt-BR')
-                                                        : "Não informada"
+                                                ) : (
+                                                    <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-2">
+                                                        <i className="bi bi-clock-history me-1"></i> Pendente
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <VisualizarItensPedidoHover pedido={pedido} />
+                                            </td>
+                                            <td className="text-end pe-4">
+                                                {pedido.status !== "PAGO" && (
+                                                    <>
+                                                        <button
+                                                            className="btn btn-outline-success btn-sm border-0 me-1"
+                                                            title="Marcar como Pago"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target={`#modalPagarPedido-${pedido.id}`}
+                                                        >
+                                                            <i className="bi bi-cash-coin fs-5"></i>
+                                                        </button>
+
+                                                        <ModalConfirmacao
+                                                            id={`modalPagarPedido-${pedido.id}`}
+                                                            titulo="Confirmar Pagamento?"
+                                                            descricao={
+                                                                <span>
+                                                                    Você está confirmando o pagamento do pedido <strong className="text-dark">#{pedido.id}</strong> do fornecedor <strong className="text-dark">{pedido.fornecedorNome}</strong>.
+                                                                </span>
+                                                            }
+                                                            onConfirmar={() => handleMarcarComoPago(pedido.id)}
+                                                            tipo="success"
+                                                        />
+                                                    </>
+                                                )}
+
+                                                <button
+                                                    className="btn btn-outline-danger btn-sm border-0"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target={`#modalExcluirPedido-${pedido.id}`}
+                                                >
+                                                    <i className="bi bi-trash3 fs-5"></i>
+                                                </button>
+
+                                                <ModalConfirmacao
+                                                    id={`modalExcluirPedido-${pedido.id}`}
+                                                    titulo="Você tem certeza?"
+                                                    descricao={
+                                                        <span>
+                                                            Você excluirá permanentemente o pedido <strong className="text-dark">#{pedido.id}</strong> do fornecedor <strong className="text-dark">{pedido.fornecedorNome}</strong>. Esta ação não poderá ser desfeita.
+                                                        </span>
                                                     }
-                                                </td>
-                                                {/* INCLUSÃO 2: Badges coloridos indicando a situação do pagamento */}
-                                                <td className="text-center">
-                                                    {pedido.status === "PAGO" ? (
-                                                        <span className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-2">
-                                                            <i className="bi bi-check-circle-fill me-1"></i> Pago
-                                                        </span>
-                                                    ) : (
-                                                        <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-2">
-                                                            <i className="bi bi-clock-history me-1"></i> Pendente
-                                                        </span>
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    <VisualizarItensHover pedido={pedido} />
-                                                </td>
-                                                <td className="text-end pe-4">
-                                                    {pedido.status !== "PAGO" && (
-                                                        <>
-                                                            <button
-                                                                className="btn btn-outline-success btn-sm border-0 me-1"
-                                                                title="Marcar como Pago"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target={`#modalPagarPedido-${pedido.id}`}
-                                                            >
-                                                                <i className="bi bi-cash-coin fs-5"></i>
-                                                            </button>
-
-                                                            <ModalConfirmacao
-                                                                id={`modalPagarPedido-${pedido.id}`}
-                                                                titulo="Confirmar Pagamento?"
-                                                                descricao={
-                                                                    <span>
-                                                                        Você está confirmando o pagamento do pedido <strong className="text-dark">#{pedido.id}</strong> do fornecedor <strong className="text-dark">{pedido.fornecedorNome}</strong>.
-                                                                    </span>
-                                                                }
-                                                                onConfirmar={() => handleMarcarComoPago(pedido.id)}
-                                                                tipo="success"
-                                                            />
-                                                        </>
-                                                    )}
-
-                                                    <button
-                                                        className="btn btn-outline-danger btn-sm border-0"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target={`#modalExcluirPedido-${pedido.id}`}
-                                                    >
-                                                        <i className="bi bi-trash3 fs-5"></i>
-                                                    </button>
-
-                                                    <ModalConfirmacao
-                                                        id={`modalExcluirPedido-${pedido.id}`}
-                                                        titulo="Você tem certeza?"
-                                                        descricao={
-                                                            <span>
-                                                                Você excluirá permanentemente o pedido <strong className="text-dark">#{pedido.id}</strong> do fornecedor <strong className="text-dark">{pedido.fornecedorNome}</strong>. Esta ação não poderá ser desfeita.
-                                                            </span>
-                                                        }
-                                                        onConfirmar={() => handlePedidoExcluido(pedido.id)}
-                                                        tipo="danger"
-                                                    />
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                    onConfirmar={() => handlePedidoExcluido(pedido.id)}
+                                                    tipo="danger"
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
                                     </tbody>
                                 </table>
                             </div>

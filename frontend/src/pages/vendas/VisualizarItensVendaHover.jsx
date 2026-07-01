@@ -1,23 +1,33 @@
 import { useEffect, useRef } from "react";
 import { Popover } from "bootstrap";
 
-function VisualizarItensHover({ pedido }) {
+function VisualizarItensVendaHover({ venda }) {
     const elementoRef = useRef(null);
 
-    const totalItens = pedido.itens?.reduce((acc, curr) => acc + curr.quant, 0) || 0;
-    
-    const totalDinheiro = pedido.total 
-        ? pedido.total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) 
+    // Soma a quantidade física de produtos na venda
+    const totalItens = venda.itens?.reduce((acc, curr) => acc + (curr.quant || 0), 0) || 0;
+
+    // Formata o valor total monetário da venda
+    const totalDinheiro = venda.total || venda.valorTotal
+        ? (venda.total || venda.valorTotal).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
         : "R$ 0,00";
+
+    // Tradução amigável do Enum FormaPagamento para exibição no cabeçalho
+    const formatarFormaPagamento = (forma) => {
+        if (forma === "CARTAO") return "Cartão";
+        if (forma === "PIX") return "PIX";
+        if (forma === "DINHEIRO") return "Dinheiro";
+        return "Não informada";
+    };
 
     const cardHtml = `
         <div class="card border-0 shadow-lg rounded-3 overflow-hidden" style="width: 320px; margin: 0 !important;">
             <div class="card-header bg-dark text-white p-3 border-0">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-receipt text-success fs-5"></i>
+                    <i class="bi bi-cart-check text-success fs-5"></i>
                     <div>
-                        <h6 class="fw-bold m-0" style="font-size: 0.9rem;">Resumo do Pedido #${pedido.id}</h6>
-                        <small class="text-muted text-uppercase" style="font-size: 10px;">${pedido.fornecedorNome || 'Fornecedor'}</small>
+                        <h6 class="fw-bold m-0" style="font-size: 0.9rem;">Resumo da Venda #${venda.id}</h6>
+                        <small class="text-uppercase text-white" style="font-size: 10px;">Pagamento: ${formatarFormaPagamento(venda.formaPagamento)}</small>
                     </div>
                 </div>
             </div>
@@ -31,8 +41,8 @@ function VisualizarItensHover({ pedido }) {
                         </tr>
                     </thead>
                     <tbody>
-                        ${pedido.itens && pedido.itens.length > 0 ? (
-                            pedido.itens.map(item => `
+                        ${venda.itens && venda.itens.length > 0 ? (
+        venda.itens.map(item => `
                                 <tr class="border-bottom border-light">
                                     <td class="ps-3 py-2">
                                         <div class="fw-semibold text-dark">${item.nomeProduto || "Produto"}</div>
@@ -46,9 +56,9 @@ function VisualizarItensHover({ pedido }) {
                                     </td>
                                 </tr>
                             `).join('')
-                        ) : (
-                            '<tr><td colSpan="3" class="text-center text-muted py-3">Nenhum item.</td></tr>'
-                        )}
+    ) : (
+        '<tr><td colSpan="3" class="text-center text-muted py-3">Nenhum item lançado.</td></tr>'
+    )}
                     </tbody>
                 </table>
             </div>
@@ -75,18 +85,18 @@ function VisualizarItensHover({ pedido }) {
         return () => {
             popoverInstance.dispose();
         };
-    }, [pedido, cardHtml]);
+    }, [venda, cardHtml]);
 
     return (
-        <span 
+        <span
             ref={elementoRef}
             className="badge bg-light text-dark border px-3 py-2 rounded-pill shadow-sm"
             style={{ cursor: "pointer", fontSize: "0.85rem", transition: "all 0.2s" }}
         >
             <i className="bi bi-eye text-primary me-1"></i>
-            {pedido.itens?.length || 0} prod(s)
+            {venda.itens?.length || 0} prod(s)
         </span>
     );
 }
 
-export default VisualizarItensHover;
+export default VisualizarItensVendaHover;

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
-function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnChange, buttonTarget, buttonText, buttonLink }) {
+// ADICIONADO: 'mostrarPesquisa = true' como valor padrão nas propriedades
+function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnChange, buttonTarget, buttonText, buttonLink, mostrarPesquisa = true }) {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
@@ -16,20 +17,23 @@ function Header({ titulo, descricao, searchPlaceholder, searchValue, searchOnCha
                 <p className="text-muted small m-0">{descricao}</p>
             </div>
 
-            <div className="w-100">
-                <div className="input-group rounded-3">
-                    <span className="input-group-text bg-white border-1 shadow-sm border-end-0 text-muted shadow-sm">
-                        <i className="bi bi-search"></i>
-                    </span>
-                    <input
-                        type="text"
-                        className="form-control border-1 shadow-sm border-start-0 input-custom-focus"
-                        placeholder={searchPlaceholder}
-                        value={searchValue}
-                        onChange={searchOnChange}
-                    />
+            {/* ALTERADO: A barra de pesquisa agora só renderiza se 'mostrarPesquisa' for verdadeiro */}
+            {mostrarPesquisa && (
+                <div className="w-100">
+                    <div className="input-group rounded-3">
+                        <span className="input-group-text bg-white border-1 shadow-sm border-end-0 text-muted shadow-sm">
+                            <i className="bi bi-search"></i>
+                        </span>
+                        <input
+                            type="text"
+                            className="form-control border-1 shadow-sm border-start-0 input-custom-focus"
+                            placeholder={searchPlaceholder}
+                            value={searchValue}
+                            onChange={searchOnChange}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div>
                 <button

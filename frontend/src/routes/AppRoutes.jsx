@@ -1,4 +1,4 @@
-import {Link, Routes, Route} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 import Welcome from "../pages/Welcome";
 import Login from "../pages/Login";
@@ -12,7 +12,8 @@ import Categorias from "../pages/categorias/Categorias";
 import Fornecedores from "../pages/fornecedores/Fornecedores";
 import Produtos from "../pages/produtos/Produtos";
 import Pedidos from "../pages/pedidos/Pedidos";
-import Checkout from "../pages/pedidos/Checkout.jsx";
+import CheckoutPedido from "../pages/pedidos/CheckoutPedido.jsx";
+import Vendas from "../pages/vendas/Vendas.jsx";
 
 export default function AppRoutes() {
 
@@ -104,7 +105,16 @@ export default function AppRoutes() {
                 path="/dashboard/pedidos/checkout"
                 element={
                     <PrivateRoute>
-                        <Checkout/>
+                        <CheckoutPedido/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/vendas"
+                element={
+                    <PrivateRoute>
+                        <Vendas />
                     </PrivateRoute>
                 }
             />

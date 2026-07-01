@@ -7,7 +7,7 @@ import Spinner from "../../components/ui/Spinner";
 import {fornecedorService} from "../../services/fornecedorService.js";
 import {produtoService} from "../../services/produtoService.js";
 
-function Checkout() {
+function CheckoutPedido() {
     const navigate = useNavigate();
 
     // Controle do fluxo (Etapas: 1, 2 ou 3)
@@ -606,4 +606,4 @@ function Checkout() {
     );
 }
 
-export default Checkout;
+export default CheckoutPedido;
