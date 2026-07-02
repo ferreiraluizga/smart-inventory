@@ -11,7 +11,16 @@ public class MarcaMapper {
     public MarcaResponse toResponse(Marca m) {
         return new MarcaResponse(
                 m.getId(),
-                m.getNome()
+                m.getNome(),
+                0L
+        );
+    }
+
+    public MarcaResponse toResponse(Marca m, Long quantidadeProdutos) {
+        return new MarcaResponse(
+                m.getId(),
+                m.getNome(),
+                quantidadeProdutos != null ? quantidadeProdutos : 0L
         );
     }
 

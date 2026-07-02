@@ -114,7 +114,9 @@ function Marcas() {
                                         buttonEditarTarget={`#modalEditarMarca-${marca.id}`}
                                         buttonExcluirTarget={`#modalExcluirMarca-${marca.id}`}
                                         onClick={() => navigate(`/dashboard/marcas/${marca.id}`)}
-                                    />
+                                    >
+                                        <p>{marca.quantidadeProdutos} produtos</p>
+                                    </Card>
 
                                     <Modal id={`modalEditarMarca-${marca.id}`} title="Editar marca">
                                         <FormEditarMarca

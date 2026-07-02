@@ -2,9 +2,11 @@ package com.ferreiraluizga.smartinventory.service;
 
 import com.ferreiraluizga.smartinventory.dto.request.MarcaRequest;
 import com.ferreiraluizga.smartinventory.dto.response.MarcaResponse;
+import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.entity.Marca;
 import com.ferreiraluizga.smartinventory.mapper.MarcaMapper;
 import com.ferreiraluizga.smartinventory.repository.MarcaRepository;
+import com.ferreiraluizga.smartinventory.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 public class MarcaService {
 
     private final MarcaRepository marcaRepository;
+
+    private final ProdutoRepository produtoRepository;
 
     private final MarcaMapper marcaMapper;
 
@@ -46,7 +50,10 @@ public class MarcaService {
     public List<MarcaResponse> listarTodos() {
         List<Marca> marcas = marcaRepository.findAll();
         return marcas.stream()
-                .map(marcaMapper::toResponse)
+                .map(marca -> {
+                    long qtd = produtoRepository.countByMarca_Id(marca.getId());
+                    return marcaMapper.toResponse(marca, qtd);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -54,6 +61,9 @@ public class MarcaService {
     public MarcaResponse buscarPorId(Long id) {
         Marca m = marcaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Marca não encontrada"));
-        return marcaMapper.toResponse(m);
+        long qtd = produtoRepository.countByMarca_Id(id);
+        return marcaMapper.toResponse(m, qtd);
     }
+
+
 }
