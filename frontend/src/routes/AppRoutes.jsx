@@ -15,6 +15,7 @@ import Pedidos from "../pages/pedidos/Pedidos";
 import CheckoutPedido from "../pages/pedidos/CheckoutPedido.jsx";
 import Vendas from "../pages/vendas/Vendas.jsx";
 import CheckoutVenda from "../pages/vendas/CheckoutVenda.jsx";
+import VisualizarMarca from "../pages/marcas/VisualizarMarca.jsx";
 
 export default function AppRoutes() {
 
@@ -62,6 +63,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Marcas/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/marcas/:id"
+                element={
+                    <PrivateRoute>
+                        <VisualizarMarca />
                     </PrivateRoute>
                 }
             />

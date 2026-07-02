@@ -38,5 +38,21 @@ export const marcaService =  {
         );
 
         return response.data;
+    },
+
+    async buscarPorId(id) {
+        const response = await api.get(
+            `/marcas/${id}`
+        );
+
+        return response.data;
+    },
+
+    async listarProdutosPorMarca(id) {
+        const response = await api.get(
+            `/marcas/${id}/produtos`
+        );
+
+        return response.data;
     }
 }
