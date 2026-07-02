@@ -2,6 +2,7 @@ package com.ferreiraluizga.smartinventory.controller;
 
 import com.ferreiraluizga.smartinventory.dto.request.MarcaRequest;
 import com.ferreiraluizga.smartinventory.dto.response.MarcaResponse;
+import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.entity.Marca;
 import com.ferreiraluizga.smartinventory.service.MarcaService;
 import jakarta.validation.Valid;
@@ -47,6 +48,12 @@ public class MarcaController {
     @GetMapping("/{id}")
     public ResponseEntity<MarcaResponse> buscarPorId(@PathVariable Long id) {
         MarcaResponse response =  marcaService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{id}/produtos")
+    public ResponseEntity<List<ProdutoResponse>> listarProdutosPorMarca(@PathVariable Long id) {
+        List<ProdutoResponse> response = marcaService.listarProdutosPorMarca(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

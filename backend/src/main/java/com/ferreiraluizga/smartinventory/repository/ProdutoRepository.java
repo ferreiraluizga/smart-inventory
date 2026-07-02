@@ -34,7 +34,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findAllByQuantidadeLessThan(Integer minimo);
 
     @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
-    List<Produto> getProdutosByMarca_Id(Long marcaId);
+    List<Produto> findByMarca_Id(Long marcaId);
 
     Long countByMarca_Id(Long marcaId);
 

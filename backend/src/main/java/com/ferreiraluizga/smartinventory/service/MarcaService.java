@@ -4,7 +4,9 @@ import com.ferreiraluizga.smartinventory.dto.request.MarcaRequest;
 import com.ferreiraluizga.smartinventory.dto.response.MarcaResponse;
 import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.entity.Marca;
+import com.ferreiraluizga.smartinventory.entity.Produto;
 import com.ferreiraluizga.smartinventory.mapper.MarcaMapper;
+import com.ferreiraluizga.smartinventory.mapper.ProdutoMapper;
 import com.ferreiraluizga.smartinventory.repository.MarcaRepository;
 import com.ferreiraluizga.smartinventory.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class MarcaService {
     private final ProdutoRepository produtoRepository;
 
     private final MarcaMapper marcaMapper;
+
+    private final ProdutoMapper produtoMapper;
 
     @Transactional
     public MarcaResponse salvar(MarcaRequest dto) {
@@ -65,5 +69,11 @@ public class MarcaService {
         return marcaMapper.toResponse(m, qtd);
     }
 
-
+    @Transactional(readOnly = true)
+    public List<ProdutoResponse> listarProdutosPorMarca(Long marcaId) {
+        List<Produto> produtos = produtoRepository.findByMarca_Id(marcaId);
+        return produtos.stream()
+                .map(produtoMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }
