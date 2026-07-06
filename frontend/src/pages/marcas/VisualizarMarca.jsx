@@ -4,6 +4,7 @@ import { marcaService } from "../../services/marcaService"; // Ajuste o caminho 
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Spinner from "../../components/ui/Spinner";
 import Toast from "../../components/ui/Toast";
+import DashboardCard from "../../components/ui/DashboardCard.jsx";
 
 function VisualizarMarca() {
     const { id } = useParams();
@@ -37,16 +38,13 @@ function VisualizarMarca() {
         }
     };
 
-    // 1. Índice de Disponibilidade: % de produtos desta marca que estão ativos
     const produtosAtivos = produtos.filter(p => p.ativo).length;
     const indiceDisponibilidade = produtos.length > 0
         ? (produtosAtivos / produtos.length) * 100
         : 0;
 
-// 2. Concentração de Stock: Total de unidades físicas que esta marca representa
     const totalUnidadesMarca = produtos.reduce((acc, p) => acc + (p.quantidade || 0), 0);
 
-// 3. Produto Líder da Marca: O produto com maior quantidade em stock
     const produtoLider = produtos.length > 0
         ? [...produtos].sort((a, b) => b.quantidade - a.quantidade)[0]
         : null;
@@ -77,7 +75,6 @@ function VisualizarMarca() {
 
     return (
         <DashboardLayout>
-            {/* Cabeçalho superior com botão Voltar */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <button className="btn btn-sm btn-outline-secondary mb-2" onClick={() => navigate("/dashboard/marcas")}>
@@ -88,75 +85,48 @@ function VisualizarMarca() {
                 </div>
             </div>
 
-            {/* Bloco de Indicadores Resumidos Focados na Marca */}
             <div className="row g-3 mb-4">
-                {/* Card 1: Variedade (Mapeado do DTO do Banco) */}
                 <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center">
-                            <div className="bg-primary bg-opacity-10 text-primary p-3 rounded me-3">
-                                <i className="bi bi-bookmark-star fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 className="text-muted mb-1 text-uppercase small fw-bold">Variedade Regulamentada</h6>
-                                <h3 className="fw-bold mb-0">{marca.quantidadeProdutos || 0} <span className="fs-6 text-muted fw-normal">SKUs</span></h3>
-                            </div>
-                        </div>
-                    </div>
+                    <DashboardCard
+                        icon="bookmark-star"
+                        iconBg="bg-primary bg-opacity-10 text-primary"
+                        title="Quantidade de Itens"
+                        value={marca?.quantidadeProdutos || 0}
+                        unit="item"
+                    />
                 </div>
 
-                {/* Card 2: Índice de Disponibilidade da Marca */}
                 <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center">
-                            <div className={`p-3 rounded me-3 ${indiceDisponibilidade > 75 ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'}`}>
-                                <i className="bi bi-activity fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 className="text-muted mb-1 text-uppercase small fw-bold">Saúde do Catálogo</h6>
-                                <h3 className="fw-bold mb-0">{indiceDisponibilidade.toFixed(0)}% <span className="fs-6 text-muted fw-normal">ativo</span></h3>
-                            </div>
-                        </div>
-                    </div>
+                    <DashboardCard
+                        icon="activity"
+                        iconBg={indiceDisponibilidade > 75 ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'}
+                        title="Saúde do Catálogo"
+                        value={`${indiceDisponibilidade?.toFixed(0)}%`}
+                        unit="ativo"
+                    />
                 </div>
 
-                {/* Card 3: Volume de Carga (Dependência de Armazém) */}
                 <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center">
-                            <div className="bg-info bg-opacity-10 text-info p-3 rounded me-3">
-                                <i className="bi bi-boxes fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 className="text-muted mb-1 text-uppercase small fw-bold">Volume Total Físico</h6>
-                                <h3 className="fw-bold mb-0">{totalUnidadesMarca} <span className="fs-6 text-muted fw-normal">unidades</span></h3>
-                            </div>
-                        </div>
-                    </div>
+                    <DashboardCard
+                        icon="boxes"
+                        iconBg="bg-info bg-opacity-10 text-info"
+                        title="Volume Total Físico"
+                        value={totalUnidadesMarca}
+                        unit="unidades"
+                    />
                 </div>
 
-                {/* Card 4: Produto Carro-Chefe da Marca */}
                 <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center">
-                            <div className="bg-dark bg-opacity-10 text-dark p-3 rounded me-3">
-                                <i className="bi bi-award fs-4"></i>
-                            </div>
-                            <div className="overflow-hidden">
-                                <h6 className="text-muted mb-1 text-uppercase small fw-bold">Principal Produto</h6>
-                                <h6 className="fw-bold mb-0 text-truncate" title={produtoLider ? produtoLider.nome : "Nenhum"}>
-                                    {produtoLider ? produtoLider.nome : "Nenhum"}
-                                </h6>
-                                <small className="text-muted text-xs">
-                                    {produtoLider ? `(${produtoLider.quantidade} un em stock)` : "Sem registos"}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
+                    <DashboardCard
+                        icon="award"
+                        iconBg="bg-dark bg-opacity-10 text-dark"
+                        title="Principal Produto"
+                        value={produtoLider ? `#${produtoLider.id}` : "Nenhum"}
+                        subtitle={produtoLider ? `${produtoLider.nome} (${produtoLider.quantidade} un)` : "Sem registos"}
+                    />
                 </div>
             </div>
 
-            {/* Listagem de produtos em tabela */}
             <div className="card border-0 shadow-sm p-4 bg-white">
                 <h5 className="fw-bold mb-3 text-dark">Produtos da Marca</h5>
 
