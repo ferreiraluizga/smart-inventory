@@ -16,6 +16,7 @@ import CheckoutPedido from "../pages/pedidos/CheckoutPedido.jsx";
 import Vendas from "../pages/vendas/Vendas.jsx";
 import CheckoutVenda from "../pages/vendas/CheckoutVenda.jsx";
 import VisualizarMarca from "../pages/marcas/VisualizarMarca.jsx";
+import VisualizarCategoria from "../pages/categorias/VisualizarCategoria.jsx";
 
 export default function AppRoutes() {
 
@@ -71,7 +72,7 @@ export default function AppRoutes() {
                 path="/dashboard/marcas/:id"
                 element={
                     <PrivateRoute>
-                        <VisualizarMarca />
+                        <VisualizarMarca/>
                     </PrivateRoute>
                 }
             />
@@ -81,6 +82,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Categorias/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/categorias/:id"
+                element={
+                    <PrivateRoute>
+                        <VisualizarCategoria/>
                     </PrivateRoute>
                 }
             />
@@ -125,7 +135,7 @@ export default function AppRoutes() {
                 path="/dashboard/vendas"
                 element={
                     <PrivateRoute>
-                        <Vendas />
+                        <Vendas/>
                     </PrivateRoute>
                 }
             />
@@ -134,7 +144,7 @@ export default function AppRoutes() {
                 path="/dashboard/vendas/checkout"
                 element={
                     <PrivateRoute>
-                        <CheckoutVenda />
+                        <CheckoutVenda/>
                     </PrivateRoute>
                 }
             />

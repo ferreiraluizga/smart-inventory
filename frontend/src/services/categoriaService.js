@@ -48,6 +48,14 @@ export const categoriaService = {
         );
 
         return response.data;
+    },
+
+    async listarProdutosPorCategoria(id) {
+        const response = await api.get(
+            `/categorias/${id}/produtos`
+        );
+
+        return response.data;
     }
 
 }

@@ -9,10 +9,13 @@ import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
 import Spinner from "../../components/ui/Spinner"
+import {useNavigate} from "react-router-dom";
 
 function Categorias() {
     const [categorias, setCategorias] = useState([]);
     const [busca, setBusca] = useState("");
+
+    const navigate = useNavigate();
 
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
@@ -107,6 +110,7 @@ function Categorias() {
                                         title={categoria.nome}
                                         buttonEditarTarget={`#modalEditarCategoria-${categoria.id}`}
                                         buttonExcluirTarget={`#modalExcluirCategoria-${categoria.id}`}
+                                        onClick={() => navigate(`/dashboard/categorias/${categoria.id}`)}
                                     >
                                         <p>{categoria.descricao}</p>
                                     </Card>

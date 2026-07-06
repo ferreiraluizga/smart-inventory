@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { marcaService } from "../../services/marcaService"; // Ajuste o caminho se necessário
+import { marcaService } from "../../services/marcaService";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Spinner from "../../components/ui/Spinner";
 import Toast from "../../components/ui/Toast";
@@ -13,7 +13,7 @@ function VisualizarMarca() {
     const [marca, setMarca] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [toast, setToast] = useState({ visivel: false, mensaje: "", tipo: "danger" });
+    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
     useEffect(() => {
         carregarDadosDaMarca();
@@ -23,11 +23,9 @@ function VisualizarMarca() {
         try {
             setLoading(true);
 
-            // 1. Busca os detalhes da marca (contendo o nome e a quantidadeProdutos)
             const dadosMarca = await marcaService.buscarPorId(id);
             setMarca(dadosMarca);
 
-            // 2. Busca a lista real de produtos vinculados
             const dadosProdutos = await marcaService.listarProdutosPorMarca(id);
             setProdutos(dadosProdutos || []);
         } catch (error) {
@@ -39,6 +37,9 @@ function VisualizarMarca() {
     };
 
     const produtosAtivos = produtos.filter(p => p.ativo).length;
+
+    const totalSkus = produtos.length;
+
     const indiceDisponibilidade = produtos.length > 0
         ? (produtosAtivos / produtos.length) * 100
         : 0;
@@ -88,11 +89,11 @@ function VisualizarMarca() {
             <div className="row g-3 mb-4">
                 <div className="col-12 col-sm-6 col-xl-3">
                     <DashboardCard
-                        icon="bookmark-star"
+                        icon="grid-3x3-gap"
                         iconBg="bg-primary bg-opacity-10 text-primary"
-                        title="Quantidade de Itens"
-                        value={marca?.quantidadeProdutos || 0}
-                        unit="item"
+                        title="Variedade de Itens"
+                        value={totalSkus}
+                        unit={totalSkus === 1 ? "SKU" : "SKUs"}
                     />
                 </div>
 
