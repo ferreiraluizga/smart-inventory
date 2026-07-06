@@ -4,6 +4,7 @@ public record CategoriaResponse(
 
         Long id,
         String nome,
-        String descricao
+        String descricao,
+        Long quantidadeProdutos
 
 ) { }

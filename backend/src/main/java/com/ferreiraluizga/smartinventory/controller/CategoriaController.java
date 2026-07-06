@@ -2,6 +2,7 @@ package com.ferreiraluizga.smartinventory.controller;
 
 import com.ferreiraluizga.smartinventory.dto.request.CategoriaRequest;
 import com.ferreiraluizga.smartinventory.dto.response.CategoriaResponse;
+import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,12 @@ public class CategoriaController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaResponse> buscarPorId(@PathVariable Long id) {
         CategoriaResponse response = categoriaService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{id}/produtos")
+    public ResponseEntity<List<ProdutoResponse>> listarProdutosPorCategoria(@PathVariable Long id) {
+        List<ProdutoResponse> response = categoriaService.listarProdutosPorCategoria(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

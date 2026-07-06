@@ -12,7 +12,17 @@ public class CategoriaMapper {
         return new CategoriaResponse(
                 c.getId(),
                 c.getNome(),
-                c.getDescricao()
+                c.getDescricao(),
+                0L
+        );
+    }
+
+    public CategoriaResponse toResponse(Categoria c, Long quantidadeProdutos) {
+        return new CategoriaResponse(
+                c.getId(),
+                c.getNome(),
+                c.getDescricao(),
+                quantidadeProdutos != null ? quantidadeProdutos : 0L
         );
     }
 

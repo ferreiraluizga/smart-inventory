@@ -2,9 +2,13 @@ package com.ferreiraluizga.smartinventory.service;
 
 import com.ferreiraluizga.smartinventory.dto.request.CategoriaRequest;
 import com.ferreiraluizga.smartinventory.dto.response.CategoriaResponse;
+import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.entity.Categoria;
+import com.ferreiraluizga.smartinventory.entity.Produto;
 import com.ferreiraluizga.smartinventory.mapper.CategoriaMapper;
+import com.ferreiraluizga.smartinventory.mapper.ProdutoMapper;
 import com.ferreiraluizga.smartinventory.repository.CategoriaRepository;
+import com.ferreiraluizga.smartinventory.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +22,11 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
 
+    private final ProdutoRepository produtoRepository;
+
     private final CategoriaMapper categoriaMapper;
+
+    private final ProdutoMapper produtoMapper;
 
     @Transactional
     public CategoriaResponse salvar(CategoriaRequest dto) {
@@ -46,7 +54,10 @@ public class CategoriaService {
     public List<CategoriaResponse> listarTodos() {
         List<Categoria> categorias = categoriaRepository.findAll();
         return categorias.stream()
-                .map(categoriaMapper::toResponse)
+                .map(categoria -> {
+                    long qtd =  produtoRepository.countByCategoria_Id(categoria.getId());
+                    return categoriaMapper.toResponse(categoria);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -54,7 +65,16 @@ public class CategoriaService {
     public CategoriaResponse buscarPorId(Long id) {
         Categoria c = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-        return categoriaMapper.toResponse(c);
+        long qtd = produtoRepository.countByCategoria_Id(id);
+        return categoriaMapper.toResponse(c, qtd);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProdutoResponse> listarProdutosPorCategoria(Long categoriaId) {
+        List<Produto> produtos = produtoRepository.findByCategoria_Id(categoriaId);
+        return produtos.stream()
+                .map(produtoMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
 }
