@@ -13,7 +13,7 @@ function VisualizarCategoria() {
     const [categoria, setCategoria] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [toast, setToast] = useState({ visivel: false, mensaje: "", tipo: "danger" });
+    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
     useEffect(() => {
         carregarDadosDaCategoria();

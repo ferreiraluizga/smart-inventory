@@ -9,6 +9,7 @@ import FormEditarFornecedor from "./FormEditarFornecedor";
 import Card from "../../components/ui/Card";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Spinner from "../../components/ui/Spinner";
+import {useNavigate} from "react-router-dom";
 
 function Fornecedores() {
     const formatarCNPJExibicao = (valor) => {
@@ -25,6 +26,8 @@ function Fornecedores() {
 
     const [fornecedores, setFornecedores] = useState([]);
     const [busca, setBusca] = useState("");
+
+    const navigate = useNavigate();
 
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
@@ -136,6 +139,7 @@ function Fornecedores() {
                                         title={fornecedor.nome}
                                         buttonEditarTarget={`#modalEditarFornecedor-${fornecedor.id}`}
                                         buttonExcluirTarget={`#modalExcluirFornecedor-${fornecedor.id}`}
+                                        onClick={() => navigate(`/dashboard/fornecedores/${fornecedor.id}`)}
                                     >
                                         <p className="mb-1 text-muted">
                                             <strong>CNPJ:</strong> {formatarCNPJExibicao(fornecedor.cnpj)}

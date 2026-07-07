@@ -50,6 +50,14 @@ export const fornecedorService = {
         );
 
         return response.data;
+    },
+
+    async listarProdutosPorFornecedor(id) {
+        const response = await api.get(
+            `/fornecedores/${id}/produtos`
+        );
+
+        return response.data;
     }
 
 }

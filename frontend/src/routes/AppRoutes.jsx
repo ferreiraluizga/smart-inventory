@@ -17,6 +17,7 @@ import Vendas from "../pages/vendas/Vendas.jsx";
 import CheckoutVenda from "../pages/vendas/CheckoutVenda.jsx";
 import VisualizarMarca from "../pages/marcas/VisualizarMarca.jsx";
 import VisualizarCategoria from "../pages/categorias/VisualizarCategoria.jsx";
+import VisualizarFornecedor from "../pages/fornecedores/VisualizarFornecedor.jsx";
 
 export default function AppRoutes() {
 
@@ -100,6 +101,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <Fornecedores/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/dashboard/fornecedores/:id"
+                element={
+                    <PrivateRoute>
+                        <VisualizarFornecedor/>
                     </PrivateRoute>
                 }
             />
