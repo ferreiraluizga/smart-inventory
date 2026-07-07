@@ -43,4 +43,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     Long countByCategoria_Id(Long categoriaId);
 
+    @EntityGraph(attributePaths = {"fornecedor", "categoria", "marca"})
+    List<Produto> findByFornecedor_Id(Long fornecedorId);
+
+    Long countByFornecedor_Id(Long fornecedorId);
+
 }

@@ -5,6 +5,7 @@ public record FornecedorResponse(
         Long id,
         String nome,
         String cnpj,
-        String email
+        String email,
+        Long quantidadeProdutos
 
 ) { }

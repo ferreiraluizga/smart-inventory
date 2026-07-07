@@ -2,6 +2,7 @@ package com.ferreiraluizga.smartinventory.controller;
 
 import com.ferreiraluizga.smartinventory.dto.request.FornecedorRequest;
 import com.ferreiraluizga.smartinventory.dto.response.FornecedorResponse;
+import com.ferreiraluizga.smartinventory.dto.response.ProdutoResponse;
 import com.ferreiraluizga.smartinventory.service.FornecedorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,12 @@ public class FornecedorController {
             return ResponseEntity.badRequest().build();
         }
         List<FornecedorResponse> response = fornecedorService.buscarPorNome(nome.trim());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{id}/produtos")
+    public ResponseEntity<List<ProdutoResponse>> listarProdutosPorFornecedor(@PathVariable Long id) {
+        List<ProdutoResponse>  response = fornecedorService.listarProdutosPorFornecedor(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

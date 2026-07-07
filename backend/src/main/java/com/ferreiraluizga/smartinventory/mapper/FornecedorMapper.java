@@ -13,7 +13,18 @@ public class FornecedorMapper {
                 f.getId(),
                 f.getNome(),
                 f.getCnpj(),
-                f.getEmail()
+                f.getEmail(),
+                0L
+        );
+    }
+
+    public FornecedorResponse toResponse(Fornecedor f, Long quantidadeProdutos) {
+        return new FornecedorResponse(
+                f.getId(),
+                f.getNome(),
+                f.getCnpj(),
+                f.getEmail(),
+                quantidadeProdutos
         );
     }
 
