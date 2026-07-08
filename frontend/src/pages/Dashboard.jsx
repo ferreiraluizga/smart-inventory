@@ -1,11 +1,191 @@
 import DashboardLayout from "../components/layout/DashboardLayout";
-import { authService } from "../services/authService";
 
 function Dashboard() {
-    return(
+    const metricas = {
+        faturamentoMensal: 50378.00,
+        contasPagar: 66286.50,
+        produtosEstoque: 425,
+        pedidosPendentes: 2
+    };
+
+    const formatarMoeda = (valor) => {
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        }).format(valor);
+    };
+
+    return (
         <DashboardLayout>
-            <h1>Dashboard</h1>
-            <p>Usuário Autenticado.</p>
+            {/* 1. SEÇÃO DE BOAS-VINDAS / TOPO */}
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 className="fw-bold m-0 text-dark">Painel de Controle</h2>
+                    <p className="text-muted m-0">Bem-vindo de volta! Aqui está o resumo do seu estoque e finanças.</p>
+                </div>
+                <div>
+                    {/* Filtro de data global comum em dashboards modernos */}
+                    <select className="form-select form-select-sm border-0 shadow-sm bg-white fw-medium text-secondary">
+                        <option value="mes">Este Mês</option>
+                        <option value="hoje">Hoje</option>
+                        <option value="30">Últimos 30 dias</option>
+                    </select>
+                </div>
+            </div>
+
+            {/* 2. GRADE DE MÉTRICAS (Régua de KPIs Superior) */}
+            <div className="row g-3 mb-4">
+                {/* Card Faturamento */}
+                <div className="col-12 col-sm-6 col-xl-3">
+                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span
+                                    className="text-muted small d-block fw-medium text-uppercase">Entradas (Mês)</span>
+                                <h3 className="fw-bold m-0 text-success mt-1">{formatarMoeda(metricas.faturamentoMensal)}</h3>
+                            </div>
+                            <div
+                                className="bg-success bg-opacity-10 text-success p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                <i className="bi bi-graph-up-arrow fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card Contas a Pagar */}
+                <div className="col-12 col-sm-6 col-xl-3">
+                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span
+                                    className="text-muted small d-block fw-medium text-uppercase">Contas a Pagar</span>
+                                <h3 className="fw-bold m-0 text-danger mt-1">{formatarMoeda(metricas.contasPagar)}</h3>
+                            </div>
+                            <div
+                                className="bg-danger bg-opacity-10 text-danger p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                <i className="bi bi-cash-stack fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card Volume de Estoque */}
+                <div className="col-12 col-sm-6 col-xl-3">
+                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span
+                                    className="text-muted small d-block fw-medium text-uppercase">Total de Itens</span>
+                                <h3 className="fw-bold m-0 text-dark mt-1">{metricas.produtosEstoque} <span
+                                    className="fs-6 fw-normal text-muted">un</span></h3>
+                            </div>
+                            <div
+                                className="bg-primary bg-opacity-10 text-primary p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                <i className="bi bi-box-seam fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card Pedidos Pendentes */}
+                <div className="col-12 col-sm-6 col-xl-3">
+                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span
+                                    className="text-muted small d-block fw-medium text-uppercase">Ordens Pendentes</span>
+                                <h3 className="fw-bold m-0 text-warning mt-1">{metricas.pedidosPendentes} <span
+                                    className="fs-6 fw-normal text-muted">pedidos</span></h3>
+                            </div>
+                            <div
+                                className="bg-warning bg-opacity-10 text-warning p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                <i className="bi bi-hourglass-split fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 3. SEÇÃO INFERIOR: GRÁFICOS OU TABELAS OPERACIONAIS */}
+            <div className="row g-4">
+                {/* Coluna Principal da Tabela Operacional */}
+                <div className="col-12 col-lg-8">
+                    <div className="card border-0 shadow-sm p-4 bg-white h-100">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5 className="fw-bold m-0 text-dark">Pedidos de Fornecedores Recentes</h5>
+                            <button className="btn btn-sm btn-link text-decoration-none p-0 text-primary fw-medium">Ver
+                                todos
+                            </button>
+                        </div>
+
+                        {/* Espaço reservado para listar os pedidos inseridos pelo seu data.sql */}
+                        <div className="table-responsive">
+                            <table className="table table-hover align-middle m-0">
+                                <thead className="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fornecedor</th>
+                                    <th>Vencimento</th>
+                                    <th>Total</th>
+                                    <th className="text-center">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td className="text-muted">#1</td>
+                                    <td className="fw-semibold">Distribuidora Tech Brasil Ltda</td>
+                                    <td>15/07/2026</td>
+                                    <td>R$ 44.993,00</td>
+                                    <td className="text-center">
+                                        <span
+                                            className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="text-muted">#2</td>
+                                    <td className="fw-semibold">Segurança Máxima Equipamentos</td>
+                                    <td>30/06/2026</td>
+                                    <td>R$ 5.385,00</td>
+                                    <td className="text-center">
+                                        <span
+                                            className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Coluna Lateral - Resumo de Alertas / Ações Rápidas */}
+                <div className="col-12 col-lg-4">
+                    <div className="card border-0 shadow-sm p-4 bg-white h-100">
+                        <h5 className="fw-bold mb-3 text-dark">Ações Rápidas</h5>
+                        <div className="d-grid gap-2">
+                            <button
+                                className="btn btn-outline-primary d-flex align-items-center justify-content-center py-2.5">
+                                <i className="bi bi-plus-circle me-2"></i> Novo Pedido de Compra
+                            </button>
+                            <button
+                                className="btn btn-outline-secondary d-flex align-items-center justify-content-center py-2.5">
+                                <i className="bi bi-box-arrow-in-down me-2"></i> Entrada de Estoque
+                            </button>
+                        </div>
+
+                        <hr className="my-4 text-muted"/>
+
+                        <h5 className="fw-bold mb-2 text-dark">Status Operacional</h5>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
+                                Fornecedores Cadastrados: <strong className="text-dark">8</strong>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
+                                Categorias Ativas: 8
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </DashboardLayout>
     );
 }
