@@ -1,11 +1,42 @@
 import DashboardLayout from "../components/layout/DashboardLayout";
+import {useEffect, useState} from "react";
+import {vendaService} from "../services/vendaService.js";
+import Spinner from "../components/ui/Spinner.jsx";
+import Toast from "../components/ui/Toast.jsx";
 
 function Dashboard() {
+    const [periodo, setPeriodo] = useState("mes");
+    const [faturamento, setFaturamento] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
+
     const metricas = {
-        faturamentoMensal: 50378.00,
         contasPagar: 66286.50,
         produtosEstoque: 425,
         pedidosPendentes: 2
+    };
+
+    useEffect(() => {
+        carregarDadosPainel();
+    }, [periodo]);
+
+    const carregarDadosPainel = async () => {
+        try {
+            setLoading(true);
+
+            // Chamada REST pura para o seu endpoint Java filtrando pelo período do select
+            const [dadosFaturamento] = await Promise.all([
+                vendaService.calcularFaturamentoPorPeriodo(periodo),
+            ]);
+
+            // Define o valor lendo a chave "total" retornada pelo Map.of do Spring
+            setFaturamento(dadosFaturamento.total || 0);
+        } catch (error) {
+            console.error("Erro ao carregar dados do painel:", error);
+            setToast({ visivel: true, mensagem: "Erro ao atualizar dados do servidor.", tipo: "danger" });
+        } finally {
+            setLoading(false);
+        }
     };
 
     const formatarMoeda = (valor) => {
@@ -24,36 +55,45 @@ function Dashboard() {
                     <p className="text-muted m-0">Bem-vindo de volta! Aqui está o resumo do seu estoque e finanças.</p>
                 </div>
                 <div>
-                    {/* Filtro de data global comum em dashboards modernos */}
-                    <select className="form-select form-select-sm border-0 shadow-sm bg-white fw-medium text-secondary">
-                        <option value="mes">Este Mês</option>
+                    {/* Select conectado ao estado do React */}
+                    <select
+                        className="form-select form-select-sm border-0 shadow-sm bg-white fw-medium text-secondary"
+                        value={periodo}
+                        onChange={(e) => setPeriodo(e.target.value)}
+                    >
+                        <option value="mensal">Este Mês</option>
                         <option value="hoje">Hoje</option>
-                        <option value="30">Últimos 30 dias</option>
+                        <option value="semanal">Últimos 30 dias</option>
                     </select>
                 </div>
             </div>
 
-            {/* 2. GRADE DE MÉTRICAS (Régua de KPIs Superior) */}
-            <div className="row g-3 mb-4">
-                {/* Card Faturamento */}
-                <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span
-                                    className="text-muted small d-block fw-medium text-uppercase">Entradas (Mês)</span>
-                                <h3 className="fw-bold m-0 text-success mt-1">{formatarMoeda(metricas.faturamentoMensal)}</h3>
-                            </div>
-                            <div
-                                className="bg-success bg-opacity-10 text-success p-3 rounded-3 d-flex align-items-center justify-content-center">
-                                <i className="bi bi-graph-up-arrow fs-4"></i>
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center mt-5 py-5">
+                    <Spinner />
+                </div>
+            ) : (
+                <>
+                    <div className="row g-3 mb-4">
+                        {/* Card Faturamento */}
+                        <div className="col-12 col-sm-6 col-xl-3">
+                            <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                                <div className="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span
+                                            className="text-muted small d-block fw-medium text-uppercase">Entradas (Mês)</span>
+                                        <h3 className="fw-bold m-0 text-success mt-1">{formatarMoeda(faturamento)}</h3>
+                                    </div>
+                                    <div
+                                        className="bg-success bg-opacity-10 text-success p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                        <i className="bi bi-graph-up-arrow fs-4"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Card Contas a Pagar */}
-                <div className="col-12 col-sm-6 col-xl-3">
+                        {/* Card Contas a Pagar */}
+                        <div className="col-12 col-sm-6 col-xl-3">
                     <div className="card border-0 shadow-sm p-3 bg-white h-100">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>
@@ -69,8 +109,8 @@ function Dashboard() {
                     </div>
                 </div>
 
-                {/* Card Volume de Estoque */}
-                <div className="col-12 col-sm-6 col-xl-3">
+                        {/* Card Volume de Estoque */}
+                        <div className="col-12 col-sm-6 col-xl-3">
                     <div className="card border-0 shadow-sm p-3 bg-white h-100">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>
@@ -87,27 +127,26 @@ function Dashboard() {
                     </div>
                 </div>
 
-                {/* Card Pedidos Pendentes */}
-                <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span
-                                    className="text-muted small d-block fw-medium text-uppercase">Ordens Pendentes</span>
-                                <h3 className="fw-bold m-0 text-warning mt-1">{metricas.pedidosPendentes} <span
-                                    className="fs-6 fw-normal text-muted">pedidos</span></h3>
-                            </div>
-                            <div
-                                className="bg-warning bg-opacity-10 text-warning p-3 rounded-3 d-flex align-items-center justify-content-center">
-                                <i className="bi bi-hourglass-split fs-4"></i>
+                        {/* Card Pedidos Pendentes */}
+                        <div className="col-12 col-sm-6 col-xl-3">
+                            <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                                <div className="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span
+                                            className="text-muted small d-block fw-medium text-uppercase">Ordens Pendentes</span>
+                                        <h3 className="fw-bold m-0 text-warning mt-1">{metricas.pedidosPendentes} <span
+                                            className="fs-6 fw-normal text-muted">pedidos</span></h3>
+                                    </div>
+                                    <div
+                                        className="bg-warning bg-opacity-10 text-warning p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                        <i className="bi bi-hourglass-split fs-4"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* 3. SEÇÃO INFERIOR: GRÁFICOS OU TABELAS OPERACIONAIS */}
-            <div className="row g-4">
+                    <div className="row g-4">
                 {/* Coluna Principal da Tabela Operacional */}
                 <div className="col-12 col-lg-8">
                     <div className="card border-0 shadow-sm p-4 bg-white h-100">
@@ -137,8 +176,8 @@ function Dashboard() {
                                     <td>15/07/2026</td>
                                     <td>R$ 44.993,00</td>
                                     <td className="text-center">
-                                        <span
-                                            className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
+                                                <span
+                                                    className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -147,8 +186,8 @@ function Dashboard() {
                                     <td>30/06/2026</td>
                                     <td>R$ 5.385,00</td>
                                     <td className="text-center">
-                                        <span
-                                            className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
+                                                <span
+                                                    className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -186,6 +225,15 @@ function Dashboard() {
                     </div>
                 </div>
             </div>
+                </>
+            )}
+
+            <Toast
+                visivel={toast.visivel}
+                mensagem={toast.mensagem}
+                tipo={toast.tipo}
+                onClose={() => setToast({ ...toast, visivel: false })}
+            />
         </DashboardLayout>
     );
 }

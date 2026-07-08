@@ -36,6 +36,17 @@ export const vendaService = {
         );
 
         return response.data;
+    },
+
+    async calcularFaturamentoPorPeriodo(periodo) {
+        const response = await api.get(
+            `/vendas/faturamento`,
+            {
+                params: { periodo }
+            }
+        );
+
+        return response.data;
     }
 
 }
