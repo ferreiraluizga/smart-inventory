@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vendas")
@@ -40,6 +42,12 @@ public class VendaController {
     public ResponseEntity<VendaResponse> buscarPorId(@PathVariable Long id) {
         VendaResponse response = vendaService.buscarPorId(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/faturamento")
+    public ResponseEntity<Map<String, Double>> calcularFaturamentoPorPeriodo(@RequestParam String periodo) {
+        Double faturamento = vendaService.calcularFaturamentoPorPeriodo(periodo);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", faturamento));
     }
 
 }

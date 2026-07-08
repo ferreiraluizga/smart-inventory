@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,19 @@ public class VendaService {
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
 
         return vendaMapper.toResponse(v);
+    }
+
+    public Double calcularFaturamentoPorPeriodo(String periodo) {
+        LocalDateTime inicio;
+
+        switch (periodo) {
+            case "hoje" -> inicio = LocalDate.now().atStartOfDay();
+            case "semanal" -> inicio = LocalDateTime.now().minusDays(7);
+            case "mensal" -> inicio = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+            default -> inicio = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        }
+
+        return vendaRepository.calcularFaturamentoPorPeriodo(inicio);
     }
 
 }
