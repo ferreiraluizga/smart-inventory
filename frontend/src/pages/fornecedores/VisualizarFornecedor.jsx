@@ -1,6 +1,6 @@
 import DashboardLayout from "../../components/layout/DashboardLayout.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fornecedorService } from "../../services/fornecedorService.js";
 import Toast from "../../components/ui/Toast.jsx";
@@ -67,7 +67,6 @@ function VisualizarFornecedor() {
 
     return (
         <DashboardLayout>
-            {/* Cabeçalho */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <button className="btn btn-sm btn-outline-secondary mb-2" onClick={() => navigate("/dashboard/fornecedores")}>
@@ -78,7 +77,6 @@ function VisualizarFornecedor() {
                 </div>
             </div>
 
-            {/* Seção de Métricas Reutilizando o DashboardCard */}
             <div className="row g-3 mb-4">
                 <div className="col-12 col-md-4">
                     <DashboardCard
@@ -108,26 +106,20 @@ function VisualizarFornecedor() {
                 </div>
             </div>
 
-            {/* Informações de Contato do Fornecedor */}
             <div className="card border-0 shadow-sm p-4 bg-white mb-4">
                 <h5 className="fw-bold mb-3 text-dark">Dados de Contato</h5>
                 <div className="row g-3">
-                    <div className="col-12 col-sm-4">
+                    <div className="col-12 col-sm-6">
                         <span className="text-muted d-block small">E-mail</span>
                         <strong className="text-dark">{fornecedor.email || "Não informado"}</strong>
                     </div>
-                    <div className="col-12 col-sm-4">
-                        <span className="text-muted d-block small">Telefone</span>
-                        <strong className="text-dark">{fornecedor.telefone || "Não informado"}</strong>
-                    </div>
-                    <div className="col-12 col-sm-4">
-                        <span className="text-muted d-block small">CNPJ / CPF</span>
-                        <strong className="text-dark">{fornecedor.cnpj || fornecedor.cpf || "Não informado"}</strong>
+                    <div className="col-12 col-sm-6">
+                        <span className="text-muted d-block small">CNPJ</span>
+                        <strong className="text-dark">{fornecedor.cnpj || "Não informado"}</strong>
                     </div>
                 </div>
             </div>
 
-            {/* Tabela de Produtos */}
             <div className="card border-0 shadow-sm p-4 bg-white">
                 <h5 className="fw-bold mb-3 text-dark">Produtos do Fornecedor</h5>
 
@@ -155,8 +147,30 @@ function VisualizarFornecedor() {
                                 <tr key={produto.id}>
                                     <td className="text-muted">#{produto.id}</td>
                                     <td className="fw-semibold text-dark">{produto.nome}</td>
-                                    <td>{produto.marcaNome || <span className="text-muted">Sem marca</span>}</td>
-                                    <td>{produto.categoriaNome || <span className="text-muted">Geral</span>}</td>
+                                    <td>
+                                        {produto.marcaId ? (
+                                            <Link
+                                                to={`/dashboard/marcas/${produto.marcaId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.marcaNome || "Sem marca"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem marca</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {produto.categoriaId ? (
+                                            <Link
+                                                to={`/dashboard/categorias/${produto.categoriaId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.categoriaNome || "Sem categoria"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem categoria</span>
+                                        )}
+                                    </td>
                                     <td>{produto.quantidade} un</td>
                                     <td>
                                         {produto.preco ? `R$ ${produto.preco.toFixed(2)}` : 'R$ 0,00'}

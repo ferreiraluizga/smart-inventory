@@ -6,7 +6,7 @@ import Toast from "../../components/ui/Toast";
 import ModalConfirmacao from "../../components/ui/ModalConfirmacao";
 import Spinner from "../../components/ui/Spinner";
 import VisualizarItensPedidoHover from "./VisualizarItensPedidoHover.jsx";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 function Pedidos() {
     const location = useLocation();
@@ -147,11 +147,9 @@ function Pedidos() {
                                         <th className="ps-4" style={{ width: "80px" }}>ID</th>
                                         <th>Fornecedor</th>
                                         <th>Vencimento</th>
-                                        {/* INCLUSÃO: Nova coluna de Data de Pagamento no cabeçalho */}
                                         <th>Pagamento</th>
                                         <th className="text-center" style={{ width: "130px" }}>Status</th>
                                         <th className="text-center">Qtd. Itens</th>
-                                        {/* AJUSTE: Ajustado ligeiramente para comportar o layout com a nova coluna */}
                                         <th className="text-end pe-4" style={{ width: "150px" }}>Ações</th>
                                     </tr>
                                     </thead>
@@ -160,9 +158,16 @@ function Pedidos() {
                                         <tr key={pedido.id}>
                                             <td className="ps-4 fw-bold text-secondary">#{pedido.id}</td>
                                             <td>
-                                                <span className="fw-semibold text-dark">
-                                                    {pedido.fornecedorNome || "Fornecedor não identificado"}
-                                                </span>
+                                                {pedido.fornecedorId ? (
+                                                    <Link
+                                                        to={`/dashboard/fornecedores/${pedido.fornecedorId}`}
+                                                        className="fw-medium link-dark"
+                                                    >
+                                                        {pedido.fornecedorNome || "Sem fornecedor"}
+                                                    </Link>
+                                                ) : (
+                                                    <span className="text-muted">Sem fornecedor</span>
+                                                )}
                                             </td>
                                             <td>
                                                 {pedido.dataVencimento

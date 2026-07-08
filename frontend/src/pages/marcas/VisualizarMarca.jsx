@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { marcaService } from "../../services/marcaService";
+import {useEffect, useState} from "react";
+import {useParams, useNavigate, Link} from "react-router-dom";
+import {marcaService} from "../../services/marcaService";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Spinner from "../../components/ui/Spinner";
 import Toast from "../../components/ui/Toast";
 import DashboardCard from "../../components/ui/DashboardCard.jsx";
 
 function VisualizarMarca() {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [marca, setMarca] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
+    const [toast, setToast] = useState({visivel: false, mensagem: "", tipo: "danger"});
 
     useEffect(() => {
         carregarDadosDaMarca();
@@ -30,7 +30,7 @@ function VisualizarMarca() {
             setProdutos(dadosProdutos || []);
         } catch (error) {
             console.error("Erro ao carregar dados da marca:", error);
-            setToast({ visivel: true, mensagem: "Erro ao carregar as informações do servidor.", tipo: "danger" });
+            setToast({visivel: true, mensagem: "Erro ao carregar as informações do servidor.", tipo: "danger"});
         } finally {
             setLoading(false);
         }
@@ -54,7 +54,7 @@ function VisualizarMarca() {
         return (
             <DashboardLayout>
                 <div className="d-flex justify-content-center align-items-center mt-5 py-5">
-                    <Spinner />
+                    <Spinner/>
                 </div>
             </DashboardLayout>
         );
@@ -78,7 +78,8 @@ function VisualizarMarca() {
         <DashboardLayout>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <button className="btn btn-sm btn-outline-secondary mb-2" onClick={() => navigate("/dashboard/marcas")}>
+                    <button className="btn btn-sm btn-outline-secondary mb-2"
+                            onClick={() => navigate("/dashboard/marcas")}>
                         <i className="bi bi-arrow-left me-1"></i> Voltar para Marcas
                     </button>
                     <h2 className="fw-bold m-0 text-dark">{marca.nome}</h2>
@@ -141,9 +142,10 @@ function VisualizarMarca() {
                         <table className="table table-hover align-middle m-0">
                             <thead className="table-light">
                             <tr>
-                                <th style={{ width: '80px' }}>ID</th>
+                                <th style={{width: '80px'}}>ID</th>
                                 <th>Nome do Produto</th>
                                 <th>Categoria</th>
+                                <th>Fornecedor</th>
                                 <th>Estoque</th>
                                 <th>Preço</th>
                                 <th className="text-center">Status</th>
@@ -154,7 +156,30 @@ function VisualizarMarca() {
                                 <tr key={produto.id}>
                                     <td className="text-muted">#{produto.id}</td>
                                     <td className="fw-semibold text-dark">{produto.nome}</td>
-                                    <td>{produto.categoriaNome || <span className="text-muted">Sem categoria</span>}</td>
+                                    <td>
+                                        {produto.categoriaId ? (
+                                            <Link
+                                                to={`/dashboard/categorias/${produto.categoriaId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.categoriaNome || "Sem categoria"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem categoria</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {produto.fornecedorId ? (
+                                            <Link
+                                                to={`/dashboard/fornecedores/${produto.fornecedorId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.fornecedorNome || "Sem fornecedor"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem fornecedor</span>
+                                        )}
+                                    </td>
                                     <td>{produto.quantidade} un</td>
                                     <td>
                                         {produto.preco ? `R$ ${produto.preco.toFixed(2)}` : 'R$ 0,00'}
@@ -180,7 +205,7 @@ function VisualizarMarca() {
                 visivel={toast.visivel}
                 mensagem={toast.mensagem}
                 tipo={toast.tipo}
-                onClose={() => setToast({ ...toast, visivel: false })}
+                onClose={() => setToast({...toast, visivel: false})}
             />
         </DashboardLayout>
     );

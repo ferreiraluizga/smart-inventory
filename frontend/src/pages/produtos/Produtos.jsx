@@ -120,7 +120,7 @@ function Produtos() {
                             {produtosFiltrados.map((produto) => (
                                 <div className="col" key={produto.id}>
                                     <Card
-                                        icon="tag"
+                                        icon="box"
                                         title={produto.nome}
                                         buttonEditarTarget={`#modalEditarProduto-${produto.id}`}
                                         buttonExcluirTarget={`#modalExcluirProduto-${produto.id}`}

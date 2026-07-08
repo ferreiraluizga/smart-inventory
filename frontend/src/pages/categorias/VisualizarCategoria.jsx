@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout.jsx";
 import Toast from "../../components/ui/Toast.jsx";
@@ -139,6 +139,7 @@ function VisualizarCategoria() {
                                 <th style={{ width: '80px' }}>ID</th>
                                 <th>Nome do Produto</th>
                                 <th>Marca</th>
+                                <th>Fornecedor</th>
                                 <th>Estoque</th>
                                 <th>Preço</th>
                                 <th className="text-center">Status</th>
@@ -149,7 +150,30 @@ function VisualizarCategoria() {
                                 <tr key={produto.id}>
                                     <td className="text-muted">#{produto.id}</td>
                                     <td className="fw-semibold text-dark">{produto.nome}</td>
-                                    <td>{produto.marcaNome || <span className="text-muted">Sem marca</span>}</td>
+                                    <td>
+                                        {produto.marcaId ? (
+                                            <Link
+                                                to={`/dashboard/marcas/${produto.marcaId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.marcaNome || "Sem marca"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem marca</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {produto.fornecedorId ? (
+                                            <Link
+                                                to={`/dashboard/fornecedores/${produto.fornecedorId}`}
+                                                className="fw-medium link-dark"
+                                            >
+                                                {produto.fornecedorNome || "Sem fornecedor"}
+                                            </Link>
+                                        ) : (
+                                            <span className="text-muted">Sem fornecedor</span>
+                                        )}
+                                    </td>
                                     <td>{produto.quantidade} un</td>
                                     <td>
                                         {produto.preco ? `R$ ${produto.preco.toFixed(2)}` : 'R$ 0,00'}
