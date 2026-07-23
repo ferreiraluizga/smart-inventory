@@ -13,8 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -153,6 +157,20 @@ public class PedidoService {
         }
 
         return pedidoRepository.calcularSaidaPorPeriodo(inicio);
+    }
+
+    public Long buscarTotalSemana() {
+        LocalDate hoje = LocalDate.now();
+
+        // Pega a segunda-feira da semana às 00:00:00
+        LocalDateTime inicioDaSemana = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .atStartOfDay();
+
+        // Pega o domingo da semana às 23:59:59.999999999
+        LocalDateTime fimDaSemana = hoje.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                .atTime(LocalTime.MAX);
+
+        return pedidoRepository.countByDataPedidoBetween(inicioDaSemana, fimDaSemana);
     }
 
 }

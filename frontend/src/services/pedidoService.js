@@ -65,6 +65,14 @@ export const pedidoService = {
         );
 
         return response.data;
+    },
+
+    async buscarTotal() {
+        const response = await api.get(
+            "/pedidos/total"
+        );
+
+        return response.data;
     }
 
 }

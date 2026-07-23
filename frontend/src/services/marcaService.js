@@ -54,5 +54,13 @@ export const marcaService =  {
         );
 
         return response.data;
+    },
+
+    async buscarTotal() {
+        const response = await api.get(
+            "/marcas/total"
+        );
+
+        return response.data;
     }
 }

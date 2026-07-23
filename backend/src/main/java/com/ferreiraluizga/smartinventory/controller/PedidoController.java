@@ -61,4 +61,10 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.calcularContasAPagar());
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<Map<String, Long>> buscarTotal() {
+        Long total = pedidoService.buscarTotalSemana();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
+    }
+
 }

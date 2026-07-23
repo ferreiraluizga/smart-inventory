@@ -50,4 +50,10 @@ public class VendaController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("faturamento", faturamento));
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<Map<String, Long>> buscarTotal() {
+        Long total = vendaService.buscarTotalSemana();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
+    }
+
 }

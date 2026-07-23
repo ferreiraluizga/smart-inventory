@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -55,6 +56,12 @@ public class MarcaController {
     public ResponseEntity<List<ProdutoResponse>> listarProdutosPorMarca(@PathVariable Long id) {
         List<ProdutoResponse> response = marcaService.listarProdutosPorMarca(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<Map<String, Long>> buscarTotal() {
+        Long total = marcaService.buscarTotal();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
     }
 
 }

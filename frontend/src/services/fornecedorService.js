@@ -58,6 +58,14 @@ export const fornecedorService = {
         );
 
         return response.data;
+    },
+
+    async buscarTotal() {
+        const response = await api.get(
+            "/fornecedores/total"
+        );
+
+        return response.data;
     }
 
 }

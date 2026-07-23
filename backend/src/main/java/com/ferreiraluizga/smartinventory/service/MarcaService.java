@@ -76,4 +76,8 @@ public class MarcaService {
                 .map(produtoMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public Long buscarTotal() {
+        return marcaRepository.count();
+    }
 }

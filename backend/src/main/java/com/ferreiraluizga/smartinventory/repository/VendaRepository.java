@@ -14,4 +14,6 @@ public interface VendaRepository extends JpaRepository<Venda, Long> {
     @Query(value = "SELECT COALESCE(SUM(v.total), 0.0) FROM vendas v WHERE v.data_venda >= :inicio", nativeQuery = true)
     Double calcularFaturamentoPorPeriodo(@Param("inicio") LocalDateTime inicio);
 
+    Long countByDataVendaBetween(LocalDateTime dataVendaAfter, LocalDateTime dataVendaBefore);
+
 }

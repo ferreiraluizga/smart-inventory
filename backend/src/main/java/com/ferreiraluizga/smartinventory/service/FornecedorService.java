@@ -89,4 +89,8 @@ public class FornecedorService {
                 .collect(Collectors.toList());
     }
 
+    public Long buscarTotal() {
+        return fornecedorRepository.count();
+    }
+
 }

@@ -20,4 +20,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     @Query(value = "SELECT COALESCE(SUM(p.total), 0.0) FROM pedidos p WHERE p.data_pedido >= :inicio AND p.status = 'PAGO'", nativeQuery = true)
     Double calcularSaidaPorPeriodo(@Param("inicio") LocalDateTime inicio);
 
+    Long countByDataPedidoBetween(LocalDateTime dataPedidoAfter, LocalDateTime dataPedidoBefore);
+
 }

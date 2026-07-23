@@ -56,6 +56,14 @@ export const categoriaService = {
         );
 
         return response.data;
+    },
+
+    async buscarTotal() {
+        const response = await api.get(
+            "/categorias/total"
+        );
+
+        return response.data;
     }
 
 }

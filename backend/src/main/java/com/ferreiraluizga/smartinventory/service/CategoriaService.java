@@ -77,4 +77,8 @@ public class CategoriaService {
                 .collect(Collectors.toList());
     }
 
+    public Long buscarTotal() {
+        return categoriaRepository.count();
+    }
+
 }

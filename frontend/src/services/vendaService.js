@@ -47,6 +47,14 @@ export const vendaService = {
         );
 
         return response.data;
+    },
+
+    async buscarTotal() {
+        const response = await api.get(
+            "/vendas/total"
+        );
+
+        return response.data;
     }
 
 }

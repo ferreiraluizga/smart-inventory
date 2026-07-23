@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -53,6 +54,12 @@ public class CategoriaController {
     public ResponseEntity<List<ProdutoResponse>> listarProdutosPorCategoria(@PathVariable Long id) {
         List<ProdutoResponse> response = categoriaService.listarProdutosPorCategoria(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<Map<String, Long>> buscarTotal() {
+        Long total = categoriaService.buscarTotal();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
     }
 
 }

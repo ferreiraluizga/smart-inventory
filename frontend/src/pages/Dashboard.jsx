@@ -6,6 +6,9 @@ import Toast from "../components/ui/Toast.jsx";
 import {pedidoService} from "../services/pedidoService.js";
 import {produtoService} from "../services/produtoService.js";
 import {Link} from "react-router-dom";
+import {categoriaService} from "../services/categoriaService.js";
+import {fornecedorService} from "../services/fornecedorService.js";
+import {marcaService} from "../services/marcaService.js";
 
 function Dashboard() {
     const [periodo, setPeriodo] = useState("mensal");
@@ -14,12 +17,13 @@ function Dashboard() {
     const [contas, setContas] = useState(0);
     const [pedidosPendentes, setPedidosPendentes] = useState(0);
     const [totalEstoque, setTotalEstoque] = useState(0);
+    const [totalCategoria, setTotalCategoria] = useState(0);
+    const [totalFornecedor, setTotalFornecedor] = useState(0);
+    const [totalMarca, setTotalMarca] = useState(0);
+    const [totalPedido, setTotalPedido] = useState(0);
+    const [totalVenda, setTotalVenda] = useState(0);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
-
-    const metricas = {
-        produtosEstoque: 425
-    };
 
     useEffect(() => {
         carregarDadosPainel();
@@ -29,11 +33,16 @@ function Dashboard() {
         try {
             setLoading(true);
 
-            const [dadosFaturamento, dadosSaida, dadosContas, dadosEstoque] = await Promise.all([
+            const [dadosFaturamento, dadosSaida, dadosContas, dadosEstoque, dadosCategoria, dadosFornecedor, dadosMarca, dadosPedido, dadosVenda] = await Promise.all([
                 vendaService.calcularFaturamentoPorPeriodo(periodo),
                 pedidoService.calcularSaidaPorPeriodo(periodo),
                 pedidoService.calcularContasAPagar(),
-                produtoService.buscarTotalEstoque()
+                produtoService.buscarTotalEstoque(),
+                categoriaService.buscarTotal(),
+                fornecedorService.buscarTotal(),
+                marcaService.buscarTotal(),
+                pedidoService.buscarTotal(),
+                vendaService.buscarTotal()
             ]);
 
             setFaturamento(dadosFaturamento.faturamento || 0);
@@ -41,6 +50,11 @@ function Dashboard() {
             setContas(dadosContas.total)
             setPedidosPendentes(dadosContas.quantidade)
             setTotalEstoque(dadosEstoque.total);
+            setTotalCategoria(dadosCategoria.total);
+            setTotalFornecedor(dadosFornecedor.total);
+            setTotalMarca(dadosMarca.total);
+            setTotalPedido(dadosPedido.total);
+            setTotalVenda(dadosVenda.total);
         } catch (error) {
             console.error("Erro ao carregar dados do painel:", error);
             setToast({ visivel: true, mensagem: "Erro ao atualizar dados do servidor.", tipo: "danger" });
@@ -174,14 +188,15 @@ function Dashboard() {
                     </div>
 
                     <div className="row g-4">
-                        {/* Coluna Principal da Tabela Operacional */}
                         <div className="col-12 col-lg-8">
                             <div className="card border-0 shadow-sm p-4 bg-white h-100">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h5 className="fw-bold m-0 text-dark">Pedidos de Fornecedores Recentes</h5>
-                                    <button className="btn btn-sm btn-link text-decoration-none p-0 text-primary fw-medium">Ver
-                                        todos
-                                    </button>
+                                    <Link
+                                        to={"/dashboard/fornecedores"}
+                                        className={"btn btn-sm btn-link text-decoration-none p-0 text-primary fw-medium"}>
+                                        Ver todos
+                                    </Link>
                                 </div>
 
                                 {/* Espaço reservado para listar os pedidos inseridos pelo seu data.sql */}
@@ -223,7 +238,6 @@ function Dashboard() {
                             </div>
                         </div>
 
-                {/* Coluna Lateral - Resumo de Alertas / Ações Rápidas */}
                 <div className="col-12 col-lg-4">
                     <div className="card border-0 shadow-sm p-4 bg-white h-100">
                         <h5 className="fw-bold mb-3 text-dark">Ações Rápidas</h5>
@@ -245,10 +259,19 @@ function Dashboard() {
                         <h5 className="fw-bold mb-2 text-dark">Status Operacional</h5>
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
-                                Fornecedores Cadastrados: <strong className="text-dark">8</strong>
+                                Fornecedores Cadastrados: <strong className="text-dark">{totalFornecedor}</strong>
                             </li>
                             <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
-                                Categorias Ativas: 8
+                                Categorias Ativas: <strong className="text-dark">{totalCategoria}</strong>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
+                                Marcas Cadastradas: <strong className="text-dark">{totalMarca}</strong>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
+                                Pedidos Realizados na Semana: <strong className="text-dark">{totalPedido}</strong>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small">
+                                Vendas Realizadas na Semana: <strong className="text-dark">{totalVenda}</strong>
                             </li>
                         </ul>
                     </div>
