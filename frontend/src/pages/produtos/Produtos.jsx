@@ -141,10 +141,10 @@ function Produtos() {
                                                 </strong>
                                             </div>
                                             <span
-                                                className={`badge ${produto.quantidade <= 5 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success'}`}
+                                                className={`badge ${produto.quantidade <= 10 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success'}`}
                                             >
                                                 Qtd: {produto.quantidade}
-                                                </span>
+                                            </span>
                                         </div>
                                         <div className="mt-2 d-flex justify-content-between small text-muted">
                                             <span>{produto.marcaNome || 'Sem Marca'}</span>
