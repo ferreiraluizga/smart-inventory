@@ -47,7 +47,7 @@ public class VendaController {
     @GetMapping("/faturamento")
     public ResponseEntity<Map<String, Double>> calcularFaturamentoPorPeriodo(@RequestParam String periodo) {
         Double faturamento = vendaService.calcularFaturamentoPorPeriodo(periodo);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", faturamento));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("faturamento", faturamento));
     }
 
 }

@@ -3,17 +3,19 @@ import {useEffect, useState} from "react";
 import {vendaService} from "../services/vendaService.js";
 import Spinner from "../components/ui/Spinner.jsx";
 import Toast from "../components/ui/Toast.jsx";
+import {pedidoService} from "../services/pedidoService.js";
 
 function Dashboard() {
-    const [periodo, setPeriodo] = useState("mes");
+    const [periodo, setPeriodo] = useState("mensal");
     const [faturamento, setFaturamento] = useState(0);
+    const [saida, setSaida] = useState(0);
+    const [contas, setContas] = useState(0);
+    const [pedidosPendentes, setPedidosPendentes] = useState(0);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
     const metricas = {
-        contasPagar: 66286.50,
-        produtosEstoque: 425,
-        pedidosPendentes: 2
+        produtosEstoque: 425
     };
 
     useEffect(() => {
@@ -25,12 +27,17 @@ function Dashboard() {
             setLoading(true);
 
             // Chamada REST pura para o seu endpoint Java filtrando pelo período do select
-            const [dadosFaturamento] = await Promise.all([
+            const [dadosFaturamento, dadosSaida, dadosContas] = await Promise.all([
                 vendaService.calcularFaturamentoPorPeriodo(periodo),
+                pedidoService.calcularSaidaPorPeriodo(periodo),
+                pedidoService.calcularContasAPagar()
             ]);
 
             // Define o valor lendo a chave "total" retornada pelo Map.of do Spring
-            setFaturamento(dadosFaturamento.total || 0);
+            setFaturamento(dadosFaturamento.faturamento || 0);
+            setSaida(dadosSaida.saida || 0);
+            setContas(dadosContas.total)
+            setPedidosPendentes(dadosContas.quantidade)
         } catch (error) {
             console.error("Erro ao carregar dados do painel:", error);
             setToast({ visivel: true, mensagem: "Erro ao atualizar dados do servidor.", tipo: "danger" });
@@ -44,6 +51,19 @@ function Dashboard() {
             style: "currency",
             currency: "BRL"
         }).format(valor);
+    };
+
+    const obterDescricaoPeriodo = () => {
+        switch (periodo) {
+            case "hoje":
+                return "Hoje";
+            case "ultimos30dias":
+                return "Últimos 30 dias";
+            case "mensal":
+                return "Este mês";
+            default:
+                return "";
+        }
     };
 
     return (
@@ -63,7 +83,7 @@ function Dashboard() {
                     >
                         <option value="mensal">Este Mês</option>
                         <option value="hoje">Hoje</option>
-                        <option value="semanal">Últimos 30 dias</option>
+                        <option value="ultimos30dias">Últimos 30 dias</option>
                     </select>
                 </div>
             </div>
@@ -81,7 +101,7 @@ function Dashboard() {
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div>
                                         <span
-                                            className="text-muted small d-block fw-medium text-uppercase">Entradas (Mês)</span>
+                                            className="text-muted small d-block fw-medium text-uppercase">Entradas ({obterDescricaoPeriodo()})</span>
                                         <h3 className="fw-bold m-0 text-success mt-1">{formatarMoeda(faturamento)}</h3>
                                     </div>
                                     <div
@@ -92,54 +112,64 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Card Contas a Pagar */}
-                        <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span
-                                    className="text-muted small d-block fw-medium text-uppercase">Contas a Pagar</span>
-                                <h3 className="fw-bold m-0 text-danger mt-1">{formatarMoeda(metricas.contasPagar)}</h3>
-                            </div>
-                            <div
-                                className="bg-danger bg-opacity-10 text-danger p-3 rounded-3 d-flex align-items-center justify-content-center">
-                                <i className="bi bi-cash-stack fs-4"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                        {/* Card Volume de Estoque */}
-                        <div className="col-12 col-sm-6 col-xl-3">
-                    <div className="card border-0 shadow-sm p-3 bg-white h-100">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span
-                                    className="text-muted small d-block fw-medium text-uppercase">Total de Itens</span>
-                                <h3 className="fw-bold m-0 text-dark mt-1">{metricas.produtosEstoque} <span
-                                    className="fs-6 fw-normal text-muted">un</span></h3>
-                            </div>
-                            <div
-                                className="bg-primary bg-opacity-10 text-primary p-3 rounded-3 d-flex align-items-center justify-content-center">
-                                <i className="bi bi-box-seam fs-4"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                        {/* Card Pedidos Pendentes */}
+                        {/* Card Saida */}
                         <div className="col-12 col-sm-6 col-xl-3">
                             <div className="card border-0 shadow-sm p-3 bg-white h-100">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div>
                                         <span
-                                            className="text-muted small d-block fw-medium text-uppercase">Ordens Pendentes</span>
-                                        <h3 className="fw-bold m-0 text-warning mt-1">{metricas.pedidosPendentes} <span
-                                            className="fs-6 fw-normal text-muted">pedidos</span></h3>
+                                            className="text-muted small d-block fw-medium text-uppercase">Saídas ({obterDescricaoPeriodo()})</span>
+                                        <h3 className="fw-bold m-0 text-danger mt-1">{formatarMoeda(saida)}</h3>
                                     </div>
                                     <div
-                                        className="bg-warning bg-opacity-10 text-warning p-3 rounded-3 d-flex align-items-center justify-content-center">
-                                        <i className="bi bi-hourglass-split fs-4"></i>
+                                        className="bg-danger bg-opacity-10 text-danger p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                        <i className="bi bi-cash-stack fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card Volume de Estoque */}
+                        <div className="col-12 col-sm-6 col-xl-3">
+                            <div className="card border-0 shadow-sm p-3 bg-white h-100">
+                                <div className="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span
+                                            className="text-muted small d-block fw-medium text-uppercase">Total de Itens</span>
+                                        <h3 className="fw-bold m-0 text-dark mt-1">{metricas.produtosEstoque} <span
+                                            className="fs-6 fw-normal text-muted">un</span></h3>
+                                    </div>
+                                    <div
+                                        className="bg-primary bg-opacity-10 text-primary p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                        <i className="bi bi-box-seam fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card Pedidos Pendentes */}
+                        <div className="col-12 col-sm-6 col-xl-3">
+                            <div className="card border-0 shadow-sm bg-white h-100">
+                                <div className="card-body p-3">
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <span className="text-muted small d-block fw-medium text-uppercase">
+                                                Ordens Pendentes
+                                            </span>
+                                            <h3 className="fw-bold m-0 text-warning mt-1">
+                                                {pedidosPendentes}
+                                                <span className="fs-6 fw-normal text-muted"> pedidos</span>
+                                            </h3>
+                                            <small className="text-muted">
+                                                Valor total pendente:
+                                                <span className="fw-bold text-dark ms-1">
+                                                    {formatarMoeda(contas)}
+                                                </span>
+                                            </small>
+                                        </div>
+                                        <div className="bg-warning bg-opacity-10 text-warning p-3 rounded-3 d-flex align-items-center justify-content-center">
+                                            <i className="bi bi-hourglass-split fs-4"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -147,54 +177,54 @@ function Dashboard() {
                     </div>
 
                     <div className="row g-4">
-                {/* Coluna Principal da Tabela Operacional */}
-                <div className="col-12 col-lg-8">
-                    <div className="card border-0 shadow-sm p-4 bg-white h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="fw-bold m-0 text-dark">Pedidos de Fornecedores Recentes</h5>
-                            <button className="btn btn-sm btn-link text-decoration-none p-0 text-primary fw-medium">Ver
-                                todos
-                            </button>
-                        </div>
+                        {/* Coluna Principal da Tabela Operacional */}
+                        <div className="col-12 col-lg-8">
+                            <div className="card border-0 shadow-sm p-4 bg-white h-100">
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 className="fw-bold m-0 text-dark">Pedidos de Fornecedores Recentes</h5>
+                                    <button className="btn btn-sm btn-link text-decoration-none p-0 text-primary fw-medium">Ver
+                                        todos
+                                    </button>
+                                </div>
 
-                        {/* Espaço reservado para listar os pedidos inseridos pelo seu data.sql */}
-                        <div className="table-responsive">
-                            <table className="table table-hover align-middle m-0">
-                                <thead className="table-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Fornecedor</th>
-                                    <th>Vencimento</th>
-                                    <th>Total</th>
-                                    <th className="text-center">Status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td className="text-muted">#1</td>
-                                    <td className="fw-semibold">Distribuidora Tech Brasil Ltda</td>
-                                    <td>15/07/2026</td>
-                                    <td>R$ 44.993,00</td>
-                                    <td className="text-center">
-                                                <span
-                                                    className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="text-muted">#2</td>
-                                    <td className="fw-semibold">Segurança Máxima Equipamentos</td>
-                                    <td>30/06/2026</td>
-                                    <td>R$ 5.385,00</td>
-                                    <td className="text-center">
-                                                <span
-                                                    className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                {/* Espaço reservado para listar os pedidos inseridos pelo seu data.sql */}
+                                <div className="table-responsive">
+                                    <table className="table table-hover align-middle m-0">
+                                        <thead className="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fornecedor</th>
+                                            <th>Vencimento</th>
+                                            <th>Total</th>
+                                            <th className="text-center">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td className="text-muted">#1</td>
+                                            <td className="fw-semibold">Distribuidora Tech Brasil Ltda</td>
+                                            <td>15/07/2026</td>
+                                            <td>R$ 44.993,00</td>
+                                            <td className="text-center">
+                                                        <span
+                                                            className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="text-muted">#2</td>
+                                            <td className="fw-semibold">Segurança Máxima Equipamentos</td>
+                                            <td>30/06/2026</td>
+                                            <td>R$ 5.385,00</td>
+                                            <td className="text-center">
+                                                        <span
+                                                            className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
                 {/* Coluna Lateral - Resumo de Alertas / Ações Rápidas */}
                 <div className="col-12 col-lg-4">
@@ -224,7 +254,7 @@ function Dashboard() {
                         </ul>
                     </div>
                 </div>
-            </div>
+                </div>
                 </>
             )}
 

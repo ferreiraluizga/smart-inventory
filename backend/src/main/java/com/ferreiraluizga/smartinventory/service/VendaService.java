@@ -106,7 +106,7 @@ public class VendaService {
 
         switch (periodo) {
             case "hoje" -> inicio = LocalDate.now().atStartOfDay();
-            case "semanal" -> inicio = LocalDateTime.now().minusDays(7);
+            case "ultimos30dias" -> inicio = LocalDateTime.now().minusDays(30);
             case "mensal" -> inicio = LocalDate.now().withDayOfMonth(1).atStartOfDay();
             default -> inicio = LocalDate.now().withDayOfMonth(1).atStartOfDay();
         }

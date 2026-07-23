@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -47,6 +48,17 @@ public class PedidoController {
     public ResponseEntity<PedidoResponse> buscarPorId(@PathVariable Long id) {
         PedidoResponse response = pedidoService.buscarPorId(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/saida")
+    public ResponseEntity<Map<String, Double>> calcularSaidaPorPeriodo(@RequestParam String periodo) {
+        Double saida = pedidoService.calcularSaidaPorPeriodo(periodo);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("saida", saida));
+    }
+
+    @GetMapping("/contas-a-pagar")
+    public ResponseEntity<Map<String, Object>> calcularContasAPagar() {
+        return ResponseEntity.ok(pedidoService.calcularContasAPagar());
     }
 
 }

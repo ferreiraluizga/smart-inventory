@@ -46,6 +46,25 @@ export const pedidoService = {
         );
 
         return response.data;
+    },
+
+    async calcularSaidaPorPeriodo(periodo) {
+        const response = await api.get(
+            `/pedidos/saida`,
+            {
+                params: { periodo }
+            }
+        );
+
+        return response.data;
+    },
+
+    async calcularContasAPagar() {
+        const response = await api.get(
+            `/pedidos/contas-a-pagar`
+        );
+
+        return response.data;
     }
 
 }

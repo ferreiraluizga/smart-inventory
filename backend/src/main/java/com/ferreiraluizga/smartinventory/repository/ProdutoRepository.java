@@ -48,4 +48,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     Long countByFornecedor_Id(Long fornecedorId);
 
+    @Query("SELECT SUM(p.quantidade) FROM Produto p")
+    Long somarTotalEstoque();
+
 }
