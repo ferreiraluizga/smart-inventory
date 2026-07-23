@@ -73,6 +73,14 @@ export const pedidoService = {
         );
 
         return response.data;
+    },
+
+    async buscarUltimosPedidos() {
+        const response = await api.get(
+            "/pedidos/ultimos-pedidos"
+        );
+
+        return response.data;
     }
 
 }

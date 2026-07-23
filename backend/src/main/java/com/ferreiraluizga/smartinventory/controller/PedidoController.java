@@ -67,4 +67,10 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
     }
 
+    @GetMapping("/ultimos-pedidos")
+    public ResponseEntity<List<PedidoResponse>> buscarUltimosPedidos() {
+        List<PedidoResponse> response = pedidoService.buscarUltimosPedidos();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

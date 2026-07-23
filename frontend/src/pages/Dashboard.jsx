@@ -22,6 +22,7 @@ function Dashboard() {
     const [totalMarca, setTotalMarca] = useState(0);
     const [totalPedido, setTotalPedido] = useState(0);
     const [totalVenda, setTotalVenda] = useState(0);
+    const [ultimosPedidos, setUltimosPedidos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
@@ -33,7 +34,7 @@ function Dashboard() {
         try {
             setLoading(true);
 
-            const [dadosFaturamento, dadosSaida, dadosContas, dadosEstoque, dadosCategoria, dadosFornecedor, dadosMarca, dadosPedido, dadosVenda] = await Promise.all([
+            const [dadosFaturamento, dadosSaida, dadosContas, dadosEstoque, dadosCategoria, dadosFornecedor, dadosMarca, dadosPedido, dadosVenda, dadosUltimosPedidos] = await Promise.all([
                 vendaService.calcularFaturamentoPorPeriodo(periodo),
                 pedidoService.calcularSaidaPorPeriodo(periodo),
                 pedidoService.calcularContasAPagar(),
@@ -42,7 +43,8 @@ function Dashboard() {
                 fornecedorService.buscarTotal(),
                 marcaService.buscarTotal(),
                 pedidoService.buscarTotal(),
-                vendaService.buscarTotal()
+                vendaService.buscarTotal(),
+                pedidoService.buscarUltimosPedidos()
             ]);
 
             setFaturamento(dadosFaturamento.faturamento || 0);
@@ -55,6 +57,7 @@ function Dashboard() {
             setTotalMarca(dadosMarca.total);
             setTotalPedido(dadosPedido.total);
             setTotalVenda(dadosVenda.total);
+            setUltimosPedidos(dadosUltimosPedidos);
         } catch (error) {
             console.error("Erro ao carregar dados do painel:", error);
             setToast({ visivel: true, mensagem: "Erro ao atualizar dados do servidor.", tipo: "danger" });
@@ -206,32 +209,53 @@ function Dashboard() {
                                         <tr>
                                             <th>ID</th>
                                             <th>Fornecedor</th>
+                                            <th>Data do Pedido</th>
                                             <th>Vencimento</th>
                                             <th>Total</th>
                                             <th className="text-center">Status</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td className="text-muted">#1</td>
-                                            <td className="fw-semibold">Distribuidora Tech Brasil Ltda</td>
-                                            <td>15/07/2026</td>
-                                            <td>R$ 44.993,00</td>
-                                            <td className="text-center">
-                                                        <span
-                                                            className="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">Pendente</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="text-muted">#2</td>
-                                            <td className="fw-semibold">Segurança Máxima Equipamentos</td>
-                                            <td>30/06/2026</td>
-                                            <td>R$ 5.385,00</td>
-                                            <td className="text-center">
-                                                        <span
-                                                            className="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Pago</span>
-                                            </td>
-                                        </tr>
+                                        <tbody className="table-border-bottom-0">
+                                        {ultimosPedidos && ultimosPedidos.length > 0 ? (
+                                            ultimosPedidos.map((pedido) => (
+                                                <tr key={pedido.id}>
+                                                    <td className="text-muted">#{pedido.id}</td>
+                                                    <td className="fw-semibold">
+                                                        {pedido.fornecedorNome}
+                                                    </td>
+                                                    <td>
+                                                        {/* Formatação simples da data (DD/MM/AAAA) */}
+                                                        {pedido.dataPedido
+                                                            ? new Date(pedido.dataPedido).toLocaleDateString('pt-BR')
+                                                            : "---"}
+                                                    </td>
+                                                    <td>
+                                                        {/* Formatação simples da data (DD/MM/AAAA) */}
+                                                        {pedido.dataVencimento
+                                                            ? new Date(pedido.dataVencimento).toLocaleDateString('pt-BR')
+                                                            : "---"}
+                                                    </td>
+                                                    <td className="fw-medium">
+                                                        {formatarMoeda(pedido.valorTotal || pedido.total || 0)}
+                                                    </td>
+                                                    <td className="text-center">
+                    <span className={`badge ${
+                        pedido.status === 'PAGO'
+                            ? 'bg-success-subtle text-success border border-success-subtle'
+                            : 'bg-warning-subtle text-warning border border-warning-subtle'
+                    } px-2.5 py-1.5 rounded-pill`}>
+                        {pedido.status || 'PENDENTE'}
+                    </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="5" className="text-center text-muted py-3">
+                                                    Nenhum pedido recente encontrado.
+                                                </td>
+                                            </tr>
+                                        )}
                                         </tbody>
                                     </table>
                                 </div>

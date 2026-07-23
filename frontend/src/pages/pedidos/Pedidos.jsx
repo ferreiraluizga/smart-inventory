@@ -146,6 +146,7 @@ function Pedidos() {
                                     <tr>
                                         <th className="ps-4" style={{ width: "80px" }}>ID</th>
                                         <th>Fornecedor</th>
+                                        <th>Data do Pedido</th>
                                         <th>Vencimento</th>
                                         <th>Pagamento</th>
                                         <th className="text-center" style={{ width: "130px" }}>Status</th>
@@ -170,12 +171,17 @@ function Pedidos() {
                                                 )}
                                             </td>
                                             <td>
+                                                {pedido.dataPedido
+                                                    ? new Date(pedido.dataPedido).toLocaleDateString('pt-BR')
+                                                    : "Não informada"
+                                                }
+                                            </td>
+                                            <td>
                                                 {pedido.dataVencimento
                                                     ? new Date(pedido.dataVencimento).toLocaleDateString('pt-BR')
                                                     : "Não informada"
                                                 }
                                             </td>
-                                            {/* INCLUSÃO: Exibição da Data de Pagamento condicional */}
                                             <td>
                                                 {pedido.status === "PAGO" && pedido.dataPagamento
                                                     ? new Date(pedido.dataPagamento).toLocaleDateString('pt-BR')

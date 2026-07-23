@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
@@ -21,5 +22,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     Double calcularSaidaPorPeriodo(@Param("inicio") LocalDateTime inicio);
 
     Long countByDataPedidoBetween(LocalDateTime dataPedidoAfter, LocalDateTime dataPedidoBefore);
+
+    List<Pedido> findTop5ByOrderByDataPedidoDesc();
 
 }

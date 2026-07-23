@@ -173,4 +173,11 @@ public class PedidoService {
         return pedidoRepository.countByDataPedidoBetween(inicioDaSemana, fimDaSemana);
     }
 
+    public List<PedidoResponse> buscarUltimosPedidos() {
+        List<Pedido> pedidos = pedidoRepository.findTop5ByOrderByDataPedidoDesc();
+        return pedidos.stream()
+                .map(pedidoMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }
