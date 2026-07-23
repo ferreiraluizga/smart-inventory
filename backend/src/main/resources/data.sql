@@ -1,5 +1,10 @@
+-- ==========================================
+-- 0. LIMPEZA INICIAL DAS TABELAS (RESET)
+-- ==========================================
 TRUNCATE TABLE produtos, pedidos, itens_pedido RESTART IDENTITY CASCADE;
 TRUNCATE TABLE categorias, marcas, fornecedores RESTART IDENTITY CASCADE;
+TRUNCATE TABLE vendas, itens_venda RESTART IDENTITY CASCADE;
+
 -- ==========================================
 -- 1. POPULAR A TABELA DE CATEGORIAS
 -- ==========================================
@@ -41,9 +46,8 @@ VALUES ('Distribuidora Tech Brasil Ltda', '12345678000199', 'contato@techbrasil.
        ('Office Express Distribuidora', '11223344000133', 'corporativo@officeexpress.com'),
        ('Segurança Máxima Equipamentos', '55667788000122', 'vendas@segurancamaxima.com');
 
-
 -- ==========================================
--- 4. POPULAR A TABELA DE PRODUTOS (TESTES)
+-- 4. POPULAR A TABELA DE PRODUTOS
 -- ==========================================
 INSERT INTO produtos (nome, descricao, preco, quantidade, ativo, fornecedor_id, categoria_id, marca_id)
 VALUES ('Smartphone Galaxy S24 Ultra', 'Smartphone premium com inteligência artificial, 256GB de armazenamento.',
@@ -78,17 +82,12 @@ VALUES ('Smartphone Galaxy S24 Ultra', 'Smartphone premium com inteligência art
         449.00, 22, TRUE, 7, 7, 10);
 
 -- ==========================================
--- 5. POPULAR A TABELA DE PEDIDOS (ATUALIZADO)
+-- 5. POPULAR A TABELA DE PEDIDOS
 -- ==========================================
 INSERT INTO pedidos (fornecedor_id, data_pedido, data_vencimento, data_pagamento, total, status)
-VALUES (1, '2026-06-26 10:00:00', '2026-07-15 14:00:00', NULL, 44993.00, 'PENDENTE');
-
-INSERT INTO pedidos (fornecedor_id, data_pedido, data_vencimento, data_pagamento, total, status)
-VALUES (8, '2026-06-25 09:15:00', '2026-06-30 18:00:00', '2026-06-26 15:30:00', 5385.00, 'PAGO');
-
-INSERT INTO pedidos (fornecedor_id, data_pedido, data_vencimento, data_pagamento, total, status)
-VALUES (2, '2026-06-26 14:20:00', '2026-08-10 12:00:00', NULL, 21293.50, 'PENDENTE');
-
+VALUES (1, '2026-06-26 10:00:00', '2026-07-15 14:00:00', NULL, 44993.00, 'PENDENTE'),
+       (8, '2026-06-25 09:15:00', '2026-06-30 18:00:00', '2026-06-26 15:30:00', 5385.00, 'PAGO'),
+       (2, '2026-06-26 14:20:00', '2026-08-10 12:00:00', NULL, 21293.50, 'PENDENTE');
 
 -- ==========================================
 -- 6. POPULAR A TABELA DE ITENS DOS PEDIDOS
@@ -100,3 +99,22 @@ VALUES (1, 1, 5, 29995.00),
        (2, 13, 5, 2095.00),
        (3, 5, 25, 12497.50),
        (3, 14, 4, 8796.00);
+
+-- ==========================================
+-- 7. POPULAR A TABELA DE VENDAS
+-- ==========================================
+INSERT INTO vendas (total, data_venda, forma_pagamento)
+VALUES (6498.90, '2026-07-20 10:30:00', 'Cartão de Crédito'),
+       (1277.90, '2026-07-21 14:15:00', 'PIX'),
+       (459.00,  '2026-07-22 16:45:00', 'Dinheiro');
+
+-- ==========================================
+-- 8. POPULAR A TABELA DE ITENS DAS VENDAS
+-- ==========================================
+INSERT INTO itens_venda (venda_id, produto_id, quant, subtotal)
+VALUES
+    (1, 1, 1, 5999.00),
+    (1, 5, 1, 499.90),
+    (2, 8, 1, 899.00),
+    (2, 9, 2, 378.80),
+    (3, 11, 1, 459.00);
