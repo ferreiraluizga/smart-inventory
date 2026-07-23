@@ -4,6 +4,8 @@ import {vendaService} from "../services/vendaService.js";
 import Spinner from "../components/ui/Spinner.jsx";
 import Toast from "../components/ui/Toast.jsx";
 import {pedidoService} from "../services/pedidoService.js";
+import {produtoService} from "../services/produtoService.js";
+import {Link} from "react-router-dom";
 
 function Dashboard() {
     const [periodo, setPeriodo] = useState("mensal");
@@ -11,6 +13,7 @@ function Dashboard() {
     const [saida, setSaida] = useState(0);
     const [contas, setContas] = useState(0);
     const [pedidosPendentes, setPedidosPendentes] = useState(0);
+    const [totalEstoque, setTotalEstoque] = useState(0);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState({ visivel: false, mensagem: "", tipo: "danger" });
 
@@ -26,18 +29,18 @@ function Dashboard() {
         try {
             setLoading(true);
 
-            // Chamada REST pura para o seu endpoint Java filtrando pelo período do select
-            const [dadosFaturamento, dadosSaida, dadosContas] = await Promise.all([
+            const [dadosFaturamento, dadosSaida, dadosContas, dadosEstoque] = await Promise.all([
                 vendaService.calcularFaturamentoPorPeriodo(periodo),
                 pedidoService.calcularSaidaPorPeriodo(periodo),
-                pedidoService.calcularContasAPagar()
+                pedidoService.calcularContasAPagar(),
+                produtoService.buscarTotalEstoque()
             ]);
 
-            // Define o valor lendo a chave "total" retornada pelo Map.of do Spring
             setFaturamento(dadosFaturamento.faturamento || 0);
             setSaida(dadosSaida.saida || 0);
             setContas(dadosContas.total)
             setPedidosPendentes(dadosContas.quantidade)
+            setTotalEstoque(dadosEstoque.total);
         } catch (error) {
             console.error("Erro ao carregar dados do painel:", error);
             setToast({ visivel: true, mensagem: "Erro ao atualizar dados do servidor.", tipo: "danger" });
@@ -68,14 +71,12 @@ function Dashboard() {
 
     return (
         <DashboardLayout>
-            {/* 1. SEÇÃO DE BOAS-VINDAS / TOPO */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2 className="fw-bold m-0 text-dark">Painel de Controle</h2>
                     <p className="text-muted m-0">Bem-vindo de volta! Aqui está o resumo do seu estoque e finanças.</p>
                 </div>
                 <div>
-                    {/* Select conectado ao estado do React */}
                     <select
                         className="form-select form-select-sm border-0 shadow-sm bg-white fw-medium text-secondary"
                         value={periodo}
@@ -95,7 +96,6 @@ function Dashboard() {
             ) : (
                 <>
                     <div className="row g-3 mb-4">
-                        {/* Card Faturamento */}
                         <div className="col-12 col-sm-6 col-xl-3">
                             <div className="card border-0 shadow-sm p-3 bg-white h-100">
                                 <div className="d-flex align-items-center justify-content-between">
@@ -112,7 +112,6 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Card Saida */}
                         <div className="col-12 col-sm-6 col-xl-3">
                             <div className="card border-0 shadow-sm p-3 bg-white h-100">
                                 <div className="d-flex align-items-center justify-content-between">
@@ -129,14 +128,13 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Card Volume de Estoque */}
                         <div className="col-12 col-sm-6 col-xl-3">
                             <div className="card border-0 shadow-sm p-3 bg-white h-100">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div>
                                         <span
                                             className="text-muted small d-block fw-medium text-uppercase">Total de Itens</span>
-                                        <h3 className="fw-bold m-0 text-dark mt-1">{metricas.produtosEstoque} <span
+                                        <h3 className="fw-bold m-0 text-dark mt-1">{totalEstoque} <span
                                             className="fs-6 fw-normal text-muted">un</span></h3>
                                     </div>
                                     <div
@@ -147,14 +145,13 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Card Pedidos Pendentes */}
                         <div className="col-12 col-sm-6 col-xl-3">
                             <div className="card border-0 shadow-sm bg-white h-100">
                                 <div className="card-body p-3">
                                     <div className="d-flex align-items-center justify-content-between">
                                         <div>
                                             <span className="text-muted small d-block fw-medium text-uppercase">
-                                                Ordens Pendentes
+                                                Pedidos Pendentes
                                             </span>
                                             <h3 className="fw-bold m-0 text-warning mt-1">
                                                 {pedidosPendentes}
@@ -230,15 +227,17 @@ function Dashboard() {
                 <div className="col-12 col-lg-4">
                     <div className="card border-0 shadow-sm p-4 bg-white h-100">
                         <h5 className="fw-bold mb-3 text-dark">Ações Rápidas</h5>
-                        <div className="d-grid gap-2">
-                            <button
-                                className="btn btn-outline-primary d-flex align-items-center justify-content-center py-2.5">
-                                <i className="bi bi-plus-circle me-2"></i> Novo Pedido de Compra
-                            </button>
-                            <button
-                                className="btn btn-outline-secondary d-flex align-items-center justify-content-center py-2.5">
-                                <i className="bi bi-box-arrow-in-down me-2"></i> Entrada de Estoque
-                            </button>
+                        <div className="d-grid gap-3">
+                            <Link
+                                to={"/pedidos/checkout"}
+                                className={"btn btn-warning text-dark fw-bold d-flex align-items-center justify-content-center py-2.5 shadow-sm border-0"}>
+                                <i className="bi bi-plus-circle-fill fs-5 me-2"></i> Novo Pedido de Compra
+                            </Link>
+                            <Link
+                                to={"/vendas/checkout"}
+                                className={"btn btn-dark fw-medium d-flex align-items-center justify-content-center py-2.5 shadow-sm"}>
+                                <i className="bi bi-box-arrow-in-down fs-5 me-2"></i> Adicionar Venda
+                            </Link>
                         </div>
 
                         <hr className="my-4 text-muted"/>

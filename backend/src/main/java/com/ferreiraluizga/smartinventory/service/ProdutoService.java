@@ -81,4 +81,8 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
+    public Long buscarTotalEstoque() {
+        return produtoRepository.somarTotalEstoque();
+    }
+
 }

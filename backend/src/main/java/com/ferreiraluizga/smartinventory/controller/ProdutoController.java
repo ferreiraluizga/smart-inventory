@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -67,6 +68,12 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponse>> buscarEstoqueBaixo() {
         List<ProdutoResponse> response = produtoService.buscarEstoqueBaixo();
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/total-estoque")
+    public ResponseEntity<Map<String, Long>> buscarTotalEstoque() {
+        Long total =  produtoService.buscarTotalEstoque();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("total", total));
     }
 
 }

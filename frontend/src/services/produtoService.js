@@ -76,5 +76,13 @@ export const produtoService = {
         );
 
         return response.data;
+    },
+
+    async buscarTotalEstoque() {
+        const response = await api.get(
+            "/produtos/total-estoque"
+        );
+
+        return response.data;
     }
 }
