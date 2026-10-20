@@ -267,12 +267,12 @@ function Dashboard() {
                         <h5 className="fw-bold mb-3 text-dark">Ações Rápidas</h5>
                         <div className="d-grid gap-3">
                             <Link
-                                to={"/pedidos/checkout"}
+                                to={"/dashboard/pedidos/checkout"}
                                 className={"btn btn-warning text-dark fw-bold d-flex align-items-center justify-content-center py-2.5 shadow-sm border-0"}>
                                 <i className="bi bi-plus-circle-fill fs-5 me-2"></i> Novo Pedido de Compra
                             </Link>
                             <Link
-                                to={"/vendas/checkout"}
+                                to={"/dashboard/vendas/checkout"}
                                 className={"btn btn-dark fw-medium d-flex align-items-center justify-content-center py-2.5 shadow-sm"}>
                                 <i className="bi bi-box-arrow-in-down fs-5 me-2"></i> Adicionar Venda
                             </Link>
