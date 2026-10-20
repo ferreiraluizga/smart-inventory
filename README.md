@@ -1,18 +1,8 @@
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=java&theme=dark" width="40"/>&nbsp;
-  <img src="https://skillicons.dev/icons?i=spring&theme=dark" height="40"/>&nbsp;
-  <img src="https://skillicons.dev/icons?i=postgresql&theme=dark" height="40"/>&nbsp;
-  <img src="https://skillicons.dev/icons?i=react&theme=dark" height="40"/>&nbsp;
-  <img src="https://skillicons.dev/icons?i=docker&theme=dark" height="40"/>&nbsp;
-</p>
-
 # SmartInventory - Sistema de Controle de Estoque e Fluxo de Caixa
 
 O **SmartInventory** é um sistema de gerenciamento inteligente de estoque e controle financeiro. O sistema permite o cadastro de produtos vinculados às suas respectivas marcas, categorias e fornecedores. Além disso, realiza o balanço automático de lucros monitorando as entradas através de **Vendas** e as saídas por meio de **Pedidos de Fornecimento**.
 
 ## 🗺️ Modelagem do Sistema
-
----
 
 ### Diagrama de Casos de Uso
 O diagrama de casos de uso ilustra como o usuário interage com as fronteiras do sistema, destacando os fluxos de cadastros e o controle do fluxo de caixa.
@@ -24,11 +14,7 @@ O diagrama de classes representa a estrutura de dados e as regras de negócio. E
 
 ![Diagrama de Classes](docs/class_diagram.svg)
 
----
-
 ## 🛠️ Tecnologias Utilizadas
-
----
 
 ### Back-End
 
@@ -56,8 +42,6 @@ O diagrama de classes representa a estrutura de dados e as regras de negócio. E
 
 ## 🚀 Como Executar o Projeto
 
----
-
 ### 📋 Pré-requisitos
 
 * **Git** instalado na sua máquina
@@ -76,13 +60,21 @@ cd smart-inventory
 docker-compose up --build
 ```
 
-3. **Acesse a aplicação**
+3. **Acesse a aplicação localmente**
 * 💻 Front-End: [http://localhost:5173](http://localhost:5173)
 * 📑 Swagger UI (Documentação do Back-End): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
-## 📁 Estrutura do Projeto
+### 🌐 Versão em Produção (Deploy)
 
----
+Caso prefira testar o sistema diretamente no navegador sem precisar instalar nada localmente, a aplicação está disponível online:
+
+* **Link do Sistema:** [https://smart-inventory-kappa-six.vercel.app](https://smart-inventory-kappa-six.vercel.app)
+
+**🔑 Credenciais de Acesso Padrão:**
+* **Usuário:** `admin@smartinventory.com`
+* **Senha:** `admin123`
+
+## 📁 Estrutura do Projeto
 
 ### 🖥️ Back-End (Spring Boot)
 
@@ -120,6 +112,6 @@ frontend/
 │   ├── services/           # Comunicação com API (Axios)
 │   └── App.jsx             # Implementação do React Router
 │
-├── index.html              # Configuração do SPA (Single Page Application)
+└── index.html              # Configuração do SPA (Single Page Application)
 └── vite.config.js          # Configuração do Vite
 ```
